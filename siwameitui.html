@@ -62,6 +62,16 @@
             margin-bottom: 40px;
         }
 
+        /* 单页容器：默认隐藏，激活时显示 */
+        .page {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
         /* 图片相册网格 */
         .gallery {
             display: grid;
@@ -75,7 +85,7 @@
             height: 220px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
             transition: transform 0.3s, box-shadow 0.3s;
-            cursor: zoom-in; /* 鼠标悬停显示放大镜图标 */
+            cursor: zoom-in;
         }
 
         .gallery-item:hover {
@@ -92,6 +102,95 @@
 
         .gallery-item:hover img {
             transform: scale(1.05);
+        }
+
+        /* 分页按钮 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 50px;
+            flex-wrap: wrap;
+        }
+
+        .page-btn {
+            padding: 8px 18px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            font-size: 14px;
+            user-select: none;
+        }
+
+        .page-btn:hover:not(.disabled):not(.active) {
+            background: #f0f0ff;
+            transform: translateY(-2px);
+        }
+
+        .page-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: transparent;
+        }
+
+        .page-btn.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* 页码跳转框 */
+        .page-jump {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-left: 10px;
+        }
+
+        .page-jump input {
+            width: 55px;
+            padding: 7px 10px;
+            border: 2px solid #667eea;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            color: #667eea;
+            outline: none;
+            transition: border-color 0.3s;
+            background: white;
+        }
+
+        .page-jump input:focus {
+            border-color: #764ba2;
+        }
+
+        .page-jump input::placeholder {
+            color: #a5b4fc;
+            font-weight: 400;
+            font-size: 12px;
+        }
+
+        .jump-btn {
+            padding: 7px 14px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .jump-btn:hover {
+            background: #f0f0ff;
+            transform: translateY(-2px);
         }
 
         /* 灯箱 - 查看原图 */
@@ -169,6 +268,16 @@
                 right: 20px;
                 font-size: 32px;
             }
+            .page-btn {
+                padding: 6px 14px;
+                font-size: 13px;
+            }
+            .page-jump {
+                margin-left: 0;
+                margin-top: 8px;
+                width: 100%;
+                justify-content: center;
+            }
         }
     </style>
 </head>
@@ -177,29 +286,60 @@
         <a href="index.html" class="back-btn">← 返回首页</a>
         <h1>丝袜美腿</h1>
         <div class="content">
-            <p class="subtitle">「阿情killy丝袜系列」</p>
-            
-            <div class="gallery">
-                <div class="gallery-item">
-                    <img src="siwameituixiangce/s1.jpg" alt="丝袜美腿1">
+
+            <!-- ========== 第 1 页 ========== -->
+            <div class="page active" data-page="1">
+                <p class="subtitle">「阿情killy丝袜系列」 第 1 页</p>
+                <div class="gallery">
+                    <div class="gallery-item">
+                        <img src="siwameituixiangce/s1.jpg" alt="丝袜美腿1">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="siwameituixiangce/s2.jpg" alt="丝袜美腿2">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="siwameituixiangce/s3.jpg" alt="丝袜美腿3">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="images/4.jpg" alt="丝袜美腿4">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="images/5.jpg" alt="丝袜美腿5">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="images/6.jpg" alt="丝袜美腿6">
+                    </div>
                 </div>
-                <div class="gallery-item">
-                    <img src="siwameituixiangce/s2.jpg" alt="丝袜美腿2">
-                </div>
-                <div class="gallery-item">
-                    <img src="siwameituixiangce/s3.jpg" alt="丝袜美腿3">
-                </div>
-                <div class="gallery-item">
-                    <img src="images/4.jpg" alt="丝袜美腿4">
-                </div>
-                <div class="gallery-item">
-                    <img src="images/5.jpg" alt="丝袜美腿5">
-                </div>
-                <div class="gallery-item">
-                    <img src="images/6.jpg" alt="丝袜美腿6">
-                </div>
-                <!-- 更多图片复制上面的gallery-item块即可 -->
             </div>
+
+            <!-- ========== 第 2 页 ========== -->
+            <div class="page" data-page="2">
+                <p class="subtitle">第 2 页</p>
+                <div class="gallery">
+                    <div class="gallery-item">
+                        <img src="siwameituixiangce/s7.jpg" alt="丝袜美腿7">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="siwameituixiangce/s8.jpg" alt="丝袜美腿8">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="siwameituixiangce/s9.jpg" alt="丝袜美腿9">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="siwameituixiangce/s10.jpg" alt="丝袜美腿10">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="siwameituixiangce/s11.jpg" alt="丝袜美腿11">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="siwameituixiangce/s12.jpg" alt="丝袜美腿12">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 分页控件（自动生成） -->
+            <div class="pagination" id="pagination"></div>
+
         </div>
     </div>
 
@@ -210,42 +350,122 @@
     </div>
 
     <script>
+        // ========== 灯箱功能 ==========
         const lightbox = document.getElementById('lightbox');
         const lightboxImg = document.getElementById('lightboxImg');
         const lightboxClose = document.getElementById('lightboxClose');
-        const gallery = document.querySelector('.gallery');
+        const galleries = document.querySelectorAll('.gallery');
 
-        // 点击缩略图打开大图
-        gallery.addEventListener('click', (e) => {
-            if (e.target.tagName === 'IMG') {
-                lightboxImg.src = e.target.src;
-                lightbox.classList.add('active');
-                document.body.style.overflow = 'hidden'; // 禁止背景滚动
-            }
+        galleries.forEach(gallery => {
+            gallery.addEventListener('click', (e) => {
+                if (e.target.tagName === 'IMG') {
+                    lightboxImg.src = e.target.src;
+                    lightbox.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                }
+            });
         });
 
-        // 关闭灯箱函数
         function closeLightbox() {
             lightbox.classList.remove('active');
             document.body.style.overflow = '';
         }
 
-        // 点击关闭按钮
         lightboxClose.addEventListener('click', closeLightbox);
-
-        // 点击黑色背景关闭
         lightbox.addEventListener('click', (e) => {
-            if (e.target === lightbox) {
-                closeLightbox();
-            }
+            if (e.target === lightbox) closeLightbox();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && lightbox.classList.contains('active')) closeLightbox();
         });
 
-        // 按键盘ESC键关闭
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && lightbox.classList.contains('active')) {
-                closeLightbox();
+        // ========== 翻页功能 ==========
+        const pages = document.querySelectorAll('.page');
+        const pagination = document.getElementById('pagination');
+        let currentPage = 1;
+        const totalPages = pages.length;
+
+        // 生成分页按钮 + 跳转框
+        function renderPagination() {
+            pagination.innerHTML = '';
+
+            // 上一页按钮
+            const prevBtn = document.createElement('button');
+            prevBtn.className = 'page-btn prev-btn';
+            prevBtn.textContent = '上一页';
+            if (currentPage === 1) prevBtn.classList.add('disabled');
+            prevBtn.addEventListener('click', () => goToPage(currentPage - 1));
+            pagination.appendChild(prevBtn);
+
+            // 页码按钮
+            for (let i = 1; i <= totalPages; i++) {
+                const pageBtn = document.createElement('button');
+                pageBtn.className = 'page-btn';
+                pageBtn.textContent = i;
+                if (i === currentPage) pageBtn.classList.add('active');
+                pageBtn.addEventListener('click', () => goToPage(i));
+                pagination.appendChild(pageBtn);
             }
-        });
+
+            // 下一页按钮
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'page-btn next-btn';
+            nextBtn.textContent = '下一页';
+            if (currentPage === totalPages) nextBtn.classList.add('disabled');
+            nextBtn.addEventListener('click', () => goToPage(currentPage + 1));
+            pagination.appendChild(nextBtn);
+
+            // 页码跳转框
+            const jumpBox = document.createElement('div');
+            jumpBox.className = 'page-jump';
+            jumpBox.innerHTML = `
+                <input type="number" id="jumpInput" min="1" max="${totalPages}" placeholder="共${totalPages}页">
+                <button class="jump-btn" id="jumpBtn">跳转</button>
+            `;
+            pagination.appendChild(jumpBox);
+
+            // 绑定跳转事件
+            const jumpInput = document.getElementById('jumpInput');
+            const jumpBtn = document.getElementById('jumpBtn');
+
+            // 点击跳转按钮
+            jumpBtn.addEventListener('click', handleJump);
+            // 按回车键跳转
+            jumpInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') handleJump();
+            });
+        }
+
+        // 处理页码跳转
+        function handleJump() {
+            const jumpInput = document.getElementById('jumpInput');
+            const value = parseInt(jumpInput.value);
+            if (isNaN(value)) {
+                jumpInput.value = '';
+                return;
+            }
+            // 限制在合法范围内
+            const targetPage = Math.max(1, Math.min(value, totalPages));
+            goToPage(targetPage);
+            jumpInput.value = ''; // 跳转后清空输入框
+        }
+
+        // 切换页面
+        function goToPage(pageNum) {
+            if (pageNum < 1 || pageNum > totalPages || pageNum === currentPage) return;
+            
+            document.querySelector(`.page[data-page="${currentPage}"]`).classList.remove('active');
+            document.querySelector(`.page[data-page="${pageNum}"]`).classList.add('active');
+            
+            currentPage = pageNum;
+            renderPagination();
+            
+            // 切换后平滑滚动到顶部
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 初始化分页
+        renderPagination();
     </script>
 </body>
 </html>
