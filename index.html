@@ -144,17 +144,19 @@
         }
 
         .feature-icon {
-            width: 70px;
-            height: 70px;
-            margin: 0 auto 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 30px;
-            color: white;
-        }
+             width: 70px;
+    height: 70px;
+    margin: 0 auto 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    color: white;
+    overflow: hidden; /* 强制裁剪超出圆角的部分 */
+    flex-shrink: 0;
+}
 
         .feature-card h3 {
             font-size: 22px;
@@ -339,7 +341,7 @@
             <a href="siwameitui.html" style="text-decoration: none; color: inherit;">
     <div class="feature-card">
         <div class="feature-icon">
-    <img src="images/siwatbiao.png" alt="丝袜美腿" style="width: 100%; height: 100%; object-fit: cover;">
+    <img src="images/siwatbiao.png" alt="丝袜美腿" style="width: 100%; height: 100%; object-fit: cover; display: block;">
 </div>
         <h3>丝袜美腿</h3>
         <p>情趣、丝袜、美腿系列</p>
