@@ -190,15 +190,11 @@
         }
 
         .about-image {
-            height: 350px;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 80px;
-        }
+    height: 350px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
 
         /* 联系表单 */
         .contact-form {
@@ -352,7 +348,9 @@
     <!-- 关于我们 -->
     <section class="about section" id="about">
         <div class="about-content">
-            <div class="about-image">🌟</div>
+            <div class="about-image">
+    <img src="1.jpg" alt="1照片" style="width: 100%; height: 100%; object-fit: cover;">
+</div>
             <div class="about-text">
                 <h2>关于killy</h2>
                 <p>这是一个使用纯 HTML 和 CSS 构建的单页网站示例，不依赖任何外部框架。</p>
