@@ -238,6 +238,22 @@
             transform: rotate(90deg);
         }
 
+        /* ========== 新增：页脚样式（和另外两个分类页完全一样） ========== */
+        footer {
+            max-width: 1200px;
+            margin: 30px auto 0;
+            background: #1e293b;
+            color: #94a3b8;
+            text-align: center;
+            padding: 30px 5%;
+            border-radius: 20px;
+        }
+
+        footer p {
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -254,6 +270,9 @@
         }
 
         @media (max-width: 600px) {
+            body {
+                padding: 30px 3%;
+            }
             .container {
                 padding: 30px 20px;
             }
@@ -282,6 +301,7 @@
     </style>
 </head>
 <body>
+
     <div class="container">
         <a href="index.html" class="back-btn">← 返回首页</a>
         <h1>写真系列</h1>
@@ -312,7 +332,7 @@
                 </div>
             </div>
 
-            <!-- ========== 第 2 页（示例，自行替换图片） ========== -->
+            <!-- ========== 第 2 页 ========== -->
             <div class="page" data-page="2">
                 <p class="subtitle">第 2 页</p>
                 <div class="gallery">
@@ -337,13 +357,13 @@
                 </div>
             </div>
 
-            <!-- 分页控件（自动生成，不用手动改） -->
+            <!-- 分页控件 -->
             <div class="pagination" id="pagination"></div>
 
         </div>
     </div>
 
-    <!-- ========== 新增：页脚（含访问量统计） ========== -->
+    <!-- 页脚（含访问量统计） -->
     <footer>
         <p>© 2026 MyWebsite. All rights reserved.</p>
         <p>阿情专属，感谢访问</p>
@@ -353,15 +373,15 @@
             访客数：<span id="busuanzi_value_site_uv" style="color: #667eea; font-weight: 500;"></span> 人
         </p>
     </footer>
-    
-    <!-- 灯箱弹窗（查看原图） -->
+
+    <!-- 灯箱弹窗 -->
     <div class="lightbox" id="lightbox">
         <span class="lightbox-close" id="lightboxClose">&times;</span>
         <img src="" alt="原图" id="lightboxImg">
     </div>
 
     <script>
-        // ========== 灯箱功能（支持所有页的图片） ==========
+        // 灯箱功能
         const lightbox = document.getElementById('lightbox');
         const lightboxImg = document.getElementById('lightboxImg');
         const lightboxClose = document.getElementById('lightboxClose');
@@ -390,17 +410,16 @@
             if (e.key === 'Escape' && lightbox.classList.contains('active')) closeLightbox();
         });
 
-        // ========== 翻页功能 ==========
+        // 翻页功能
         const pages = document.querySelectorAll('.page');
         const pagination = document.getElementById('pagination');
         let currentPage = 1;
         const totalPages = pages.length;
 
-        // 生成分页按钮 + 跳转框
         function renderPagination() {
             pagination.innerHTML = '';
 
-            // 上一页按钮
+            // 上一页
             const prevBtn = document.createElement('button');
             prevBtn.className = 'page-btn prev-btn';
             prevBtn.textContent = '上一页';
@@ -408,7 +427,7 @@
             prevBtn.addEventListener('click', () => goToPage(currentPage - 1));
             pagination.appendChild(prevBtn);
 
-            // 页码按钮（自动根据页数生成）
+            // 页码
             for (let i = 1; i <= totalPages; i++) {
                 const pageBtn = document.createElement('button');
                 pageBtn.className = 'page-btn';
@@ -418,7 +437,7 @@
                 pagination.appendChild(pageBtn);
             }
 
-            // 下一页按钮
+            // 下一页
             const nextBtn = document.createElement('button');
             nextBtn.className = 'page-btn next-btn';
             nextBtn.textContent = '下一页';
@@ -426,7 +445,7 @@
             nextBtn.addEventListener('click', () => goToPage(currentPage + 1));
             pagination.appendChild(nextBtn);
 
-            // 页码跳转框
+            // 跳转框
             const jumpBox = document.createElement('div');
             jumpBox.className = 'page-jump';
             jumpBox.innerHTML = `
@@ -435,17 +454,14 @@
             `;
             pagination.appendChild(jumpBox);
 
-            // 绑定跳转事件
             const jumpInput = document.getElementById('jumpInput');
             const jumpBtn = document.getElementById('jumpBtn');
-
             jumpBtn.addEventListener('click', handleJump);
             jumpInput.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter') handleJump();
             });
         }
 
-        // 处理页码跳转
         function handleJump() {
             const jumpInput = document.getElementById('jumpInput');
             const value = parseInt(jumpInput.value);
@@ -453,13 +469,11 @@
                 jumpInput.value = '';
                 return;
             }
-            // 自动限制在合法范围内
             const targetPage = Math.max(1, Math.min(value, totalPages));
             goToPage(targetPage);
             jumpInput.value = '';
         }
 
-        // 切换页面
         function goToPage(pageNum) {
             if (pageNum < 1 || pageNum > totalPages || pageNum === currentPage) return;
             
@@ -468,16 +482,14 @@
             
             currentPage = pageNum;
             renderPagination();
-            
-            // 切换后平滑滚动到顶部
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // 初始化分页
         renderPagination();
     </script>
 
-    <!-- ========== 新增：访问量统计脚本 ========== -->
-    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <!-- 访问量统计脚本 -->
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
 </body>
 </html>
