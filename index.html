@@ -190,11 +190,11 @@
         }
 
         .about-image {
-    height: 350px;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-}
+            height: 350px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
 
         /* 联系表单 */
         .contact-form {
@@ -217,7 +217,16 @@
             color: #374151;
         }
 
-        .form-group input,
+        .contact-info {
+            padding: 12px 16px;
+            background-color: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 16px;
+            color: #374151;
+            margin: 0;
+        }
+
         .form-group textarea {
             width: 100%;
             padding: 12px 16px;
@@ -228,7 +237,6 @@
             font-family: inherit;
         }
 
-        .form-group input:focus,
         .form-group textarea:focus {
             outline: none;
             border-color: #667eea;
@@ -349,8 +357,8 @@
     <section class="about section" id="about">
         <div class="about-content">
             <div class="about-image">
-    <img src="images/11.jpg" alt="11照片" style="width: 100%; height: 100%; object-fit: cover;">
-</div>
+                <img src="images/11.jpg" alt="11照片" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
             <div class="about-text">
                 <h2>关于killy</h2>
                 <p>这是一个使用纯 HTML 和 CSS 构建的单页网站示例，不依赖任何外部框架。</p>
@@ -365,12 +373,12 @@
         <h2 class="section-title">联系killy</h2>
         <form class="contact-form" onsubmit="handleSubmit(event)">
             <div class="form-group">
-                <label for="name">姓名</label>
-                <input type="text" id="name" placeholder="请输入您的姓名" required>
+                <label>微信</label>
+                <p class="contact-info">duoerkilly</p>
             </div>
             <div class="form-group">
-                <label for="email">邮箱</label>
-                <input type="email" id="email" placeholder="请输入您的邮箱" required>
+                <label>QQ</label>
+                <p class="contact-info">513741745</p>
             </div>
             <div class="form-group">
                 <label for="message">留言</label>
@@ -404,8 +412,7 @@
         // 表单提交处理
         function handleSubmit(e) {
             e.preventDefault();
-            const name = document.getElementById('name').value;
-            alert('感谢您的留言，' + name + '！我们会尽快与您联系。');
+            alert('感谢您的留言！我们会尽快与您联系。');
             e.target.reset();
         }
 
