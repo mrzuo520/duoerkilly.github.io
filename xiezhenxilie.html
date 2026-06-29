@@ -62,7 +62,7 @@
             margin-bottom: 40px;
         }
 
-        /* 单页容器：默认隐藏，激活时显示 */
+        /* 单页容器 */
         .page {
             display: none;
             animation: fadeIn 0.3s ease;
@@ -80,6 +80,7 @@
         }
 
         .gallery-item {
+            position: relative;          /* ★ 给播放按钮做定位锚 */
             border-radius: 12px;
             overflow: hidden;
             height: 220px;
@@ -104,7 +105,7 @@
             transform: scale(1.05);
         }
 
-        /* ===== 新增：gallery-item 里的 video 继承同款样式 ===== */
+        /* ===== gallery-item 里的 video ===== */
         .gallery-item video {
             width: 100%;
             height: 100%;
@@ -115,6 +116,40 @@
 
         .gallery-item:hover video {
             transform: scale(1.05);
+        }
+
+        /* ===== 悬停播放按钮 ▶ ===== */
+        .gallery-item .play-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            width: 56px;
+            height: 56px;
+            background: rgba(0, 0, 0, 0.55);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.25s, transform 0.25s;
+            pointer-events: none;   /* 不让它挡点击 */
+        }
+
+        .gallery-item .play-btn::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 10px 0 10px 18px;
+            border-color: transparent transparent transparent #fff;
+            margin-left: 3px;
+        }
+
+        .gallery-item:hover .play-btn {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
         }
 
         /* 分页按钮 */
@@ -157,7 +192,6 @@
             transform: none !important;
         }
 
-        /* 页码跳转框 */
         .page-jump {
             display: flex;
             align-items: center;
@@ -206,7 +240,7 @@
             transform: translateY(-2px);
         }
 
-        /* 灯箱 - 查看原图 / 播视频 */
+        /* 灯箱 */
         .lightbox {
             display: none;
             position: fixed;
@@ -234,7 +268,6 @@
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
         }
 
-        /* 灯箱里的 video */
         .lightbox video {
             max-width: 90%;
             max-height: 90vh;
@@ -259,7 +292,6 @@
             transform: rotate(90deg);
         }
 
-        /* ========== 页脚样式 ========== */
         footer {
             max-width: 1200px;
             margin: 30px auto 0;
@@ -280,7 +312,6 @@
             to { opacity: 1; }
         }
 
-        /* 响应式适配 */
         @media (max-width: 900px) {
             .gallery {
                 grid-template-columns: repeat(3, 1fr);
@@ -332,27 +363,34 @@
             <div class="page active" data-page="1">
                 <p class="subtitle">「阿情killy性感视频」 第 1 页</p>
                 <div class="gallery">
-                    <!-- mp4 换成 video 标签 -->
+                    <!-- sp1.mp4 -->
                     <div class="gallery-item">
                         <video src="xiezhenxiliexiangce/sp1.mp4"
                                muted loop preload="metadata"
-                               style="width:100%;height:100%;object-fit:cover;">
+                               style="width:100%;height:100%;object-fit:cover;display:block;">
                         </video>
+                        <span class="play-btn"></span>
+                    </div>
+                    <!-- 2~6.mp4 全部 img→video -->
+                    <div class="gallery-item">
+                        <video src="images/2.mp4" muted loop preload="metadata" style="width:100%;height:100%;object-fit:cover;display:block;"></video>
+                        <span class="play-btn"></span>
                     </div>
                     <div class="gallery-item">
-                        <img src="images/2.mp4" alt="性感视频2">
+                        <video src="images/3.mp4" muted loop preload="metadata" style="width:100%;height:100%;object-fit:cover;display:block;"></video>
+                        <span class="play-btn"></span>
                     </div>
                     <div class="gallery-item">
-                        <img src="images/3.mp4" alt="性感视频3">
+                        <video src="images/4.mp4" muted loop preload="metadata" style="width:100%;height:100%;object-fit:cover;display:block;"></video>
+                        <span class="play-btn"></span>
                     </div>
                     <div class="gallery-item">
-                        <img src="images/4.mp4" alt="性感视频4">
+                        <video src="images/5.mp4" muted loop preload="metadata" style="width:100%;height:100%;object-fit:cover;display:block;"></video>
+                        <span class="play-btn"></span>
                     </div>
                     <div class="gallery-item">
-                        <img src="images/5.mp4" alt="性感视频5">
-                    </div>
-                    <div class="gallery-item">
-                        <img src="images/6.mp4" alt="性感视频6">
+                        <video src="images/6.mp4" muted loop preload="metadata" style="width:100%;height:100%;object-fit:cover;display:block;"></video>
+                        <span class="play-btn"></span>
                     </div>
                 </div>
             </div>
@@ -362,22 +400,28 @@
                 <p class="subtitle">第 2 页</p>
                 <div class="gallery">
                     <div class="gallery-item">
-                        <img src="images/7.mp4" alt="性感视频7">
+                        <video src="images/7.mp4" muted loop preload="metadata" style="width:100%;height:100%;object-fit:cover;display:block;"></video>
+                        <span class="play-btn"></span>
                     </div>
                     <div class="gallery-item">
-                        <img src="images/8.mp4" alt="性感视频8">
+                        <video src="images/8.mp4" muted loop preload="metadata" style="width:100%;height:100%;object-fit:cover;display:block;"></video>
+                        <span class="play-btn"></span>
                     </div>
                     <div class="gallery-item">
-                        <img src="images/9.mp4" alt="性感视频9">
+                        <video src="images/9.mp4" muted loop preload="metadata" style="width:100%;height:100%;object-fit:cover;display:block;"></video>
+                        <span class="play-btn"></span>
                     </div>
                     <div class="gallery-item">
-                        <img src="images/10.mp4" alt="性感视频10">
+                        <video src="images/10.mp4" muted loop preload="metadata" style="width:100%;height:100%;object-fit:cover;display:block;"></video>
+                        <span class="play-btn"></span>
                     </div>
                     <div class="gallery-item">
-                        <img src="images/11.mp4" alt="性感视频11">
+                        <video src="images/11.mp4" muted loop preload="metadata" style="width:100%;height:100%;object-fit:cover;display:block;"></video>
+                        <span class="play-btn"></span>
                     </div>
                     <div class="gallery-item">
-                        <img src="images/12.mp4" alt="性感视频12">
+                        <video src="images/12.mp4" muted loop preload="metadata" style="width:100%;height:100%;object-fit:cover;display:block;"></video>
+                        <span class="play-btn"></span>
                     </div>
                 </div>
             </div>
@@ -388,7 +432,7 @@
         </div>
     </div>
 
-    <!-- 页脚（含访问量统计） -->
+    <!-- 页脚 -->
     <footer>
         <p>© 2026 MyWebsite. All rights reserved.</p>
         <p>阿情专属，感谢访问</p>
@@ -399,21 +443,19 @@
         </p>
     </footer>
 
-    <!-- 灯箱弹窗 -->
+    <!-- 灯箱 -->
     <div class="lightbox" id="lightbox">
         <span class="lightbox-close" id="lightboxClose">&times;</span>
-        <!-- 这里原本只有 img，JS 会按点击目标动态换内容 -->
         <img src="" alt="原图" id="lightboxImg">
     </div>
 
     <script>
-        // ========== 灯箱功能（兼容 img + video）==========
+        // ========== 灯箱（兼容 img + video）==========
         const lightbox = document.getElementById('lightbox');
         const lightboxImg = document.getElementById('lightboxImg');
         const lightboxClose = document.getElementById('lightboxClose');
         const galleries = document.querySelectorAll('.gallery');
 
-        // 清空灯箱：移除可能由之前创建的 video 节点
         function clearLightbox() {
             const oldVideo = lightbox.querySelector('video');
             if (oldVideo) {
@@ -432,12 +474,10 @@
                 clearLightbox();
 
                 if (target.tagName === 'IMG') {
-                    // 图片：走原来的 img 逻辑
                     lightboxImg.src = target.src;
                     lightboxImg.alt = target.alt || '原图';
                 } else if (target.tagName === 'VIDEO') {
-                    // 视频：动态创建一个 video 放进灯箱
-                    lightboxImg.style.display = 'none'; // 藏掉 img
+                    lightboxImg.style.display = 'none';
                     const v = document.createElement('video');
                     v.src = target.src;
                     v.controls = true;
@@ -455,14 +495,10 @@
         });
 
         function closeLightbox() {
-            // 关灯箱时停掉视频
             const playingVideo = lightbox.querySelector('video');
-            if (playingVideo) {
-                playingVideo.pause();
-            }
+            if (playingVideo) playingVideo.pause();
             lightbox.classList.remove('active');
             document.body.style.overflow = '';
-            // 延迟清一下，避免闪
             setTimeout(clearLightbox, 300);
         }
 
@@ -474,7 +510,7 @@
             if (e.key === 'Escape' && lightbox.classList.contains('active')) closeLightbox();
         });
 
-        // ========== 翻页功能 ==========
+        // ========== 翻页 ==========
         const pages = document.querySelectorAll('.page');
         const pagination = document.getElementById('pagination');
         let currentPage = 1;
@@ -483,7 +519,6 @@
         function renderPagination() {
             pagination.innerHTML = '';
 
-            // 上一页
             const prevBtn = document.createElement('button');
             prevBtn.className = 'page-btn prev-btn';
             prevBtn.textContent = '上一页';
@@ -491,7 +526,6 @@
             prevBtn.addEventListener('click', () => goToPage(currentPage - 1));
             pagination.appendChild(prevBtn);
 
-            // 页码
             for (let i = 1; i <= totalPages; i++) {
                 const pageBtn = document.createElement('button');
                 pageBtn.className = 'page-btn';
@@ -501,7 +535,6 @@
                 pagination.appendChild(pageBtn);
             }
 
-            // 下一页
             const nextBtn = document.createElement('button');
             nextBtn.className = 'page-btn next-btn';
             nextBtn.textContent = '下一页';
@@ -509,7 +542,6 @@
             nextBtn.addEventListener('click', () => goToPage(currentPage + 1));
             pagination.appendChild(nextBtn);
 
-            // 跳转框
             const jumpBox = document.createElement('div');
             jumpBox.className = 'page-jump';
             jumpBox.innerHTML = `
@@ -529,21 +561,15 @@
         function handleJump() {
             const jumpInput = document.getElementById('jumpInput');
             const value = parseInt(jumpInput.value);
-            if (isNaN(value)) {
-                jumpInput.value = '';
-                return;
-            }
-            const targetPage = Math.max(1, Math.min(value, totalPages));
-            goToPage(targetPage);
+            if (isNaN(value)) { jumpInput.value = ''; return; }
+            goToPage(Math.max(1, Math.min(value, totalPages)));
             jumpInput.value = '';
         }
 
         function goToPage(pageNum) {
             if (pageNum < 1 || pageNum > totalPages || pageNum === currentPage) return;
-
             document.querySelector(`.page[data-page="${currentPage}"]`).classList.remove('active');
             document.querySelector(`.page[data-page="${pageNum}"]`).classList.add('active');
-
             currentPage = pageNum;
             renderPagination();
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -552,8 +578,6 @@
         renderPagination();
     </script>
 
-    <!-- 访问量统计脚本 -->
     <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
 </body>
 </html>
