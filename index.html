@@ -452,21 +452,15 @@
     <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
         <script>
 function checkPwd() {
+    var pwd = prompt("请输入访问密码：", "");
+    
+    // 只要密码不等于正确值（包括点击取消、输入错误、留空），统统拦截
+    if (pwd !== "123456") {  // 改成你自己的密码
+        alert("密码错误！");
+        return false; 
+    }
 
-var pwd = prompt("请输入访问密码：", "");
-
-if (pwd === "123456") {  // 改成你自己的密码
-
-return true; // 密码正确，允许跳转
-
-} else if (pwd !== null) {
-
-alert("密码错误！");
-
-return false; // 密码错误，阻止跳转
-
-}
-
+    return true; 
 }
     </script>
 </body>
