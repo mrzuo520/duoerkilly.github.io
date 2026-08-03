@@ -597,13 +597,33 @@
         }
 
         function goToPage(pageNum) {
-            if (pageNum < 1 || pageNum > totalPages || pageNum === currentPage) return;
-            document.querySelector(`.page[data-page="${currentPage}"]`).classList.remove('active');
-            document.querySelector(`.page[data-page="${pageNum}"]`).classList.add('active');
-            currentPage = pageNum;
-            renderPagination();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+    if (pageNum < 1 || pageNum > totalPages || pageNum === currentPage) return;
+
+    // 1. 清理上一页的视频（暂停并移除，释放内存）
+    const prevPage = document.querySelector(`.page[data-page="${currentPage}"]`);
+    const prevVideos = prevPage.querySelectorAll('video');
+    prevVideos.forEach(video => {
+        video.pause();
+        video.remove();
+    });
+
+    // 2. 切换页面显示
+    prevPage.classList.remove('active');
+    const targetPage = document.querySelector(`.page[data-page="${pageNum}"]`);
+    targetPage.classList.add('active');
+
+    // 3. 立即加载目标页的图片（将 data-src 转为 src）
+    const targetImages = targetPage.querySelectorAll('img[data-src]');
+    targetImages.forEach(img => {
+        img.src = img.dataset.src;
+        img.removeAttribute('data-src');
+    });
+
+    // 4. 更新分页状态和滚动位置
+    currentPage = pageNum;
+    renderPagination();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
         renderPagination();
     </script>
