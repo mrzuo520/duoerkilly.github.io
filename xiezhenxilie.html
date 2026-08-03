@@ -603,8 +603,10 @@
     const prevPage = document.querySelector(`.page[data-page="${currentPage}"]`);
     const prevVideos = prevPage.querySelectorAll('video');
     prevVideos.forEach(video => {
-        video.pause();
-        video.remove();
+    video.pause();
+    video.currentTime = 0; // 重置播放进度到开头
+    // 可选：隐藏 video，显示 poster 封面
+    // video.style.display = 'none';
     });
 
     // 2. 切换页面显示
