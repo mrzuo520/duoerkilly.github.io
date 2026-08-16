@@ -278,6 +278,47 @@
             cursor: not-allowed;
         }
 
+        /* 页码跳转框 */
+        .page-jump {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-left: 10px;
+        }
+        .page-jump input {
+            width: 60px;
+            padding: 6px 10px;
+            border: 2px solid #667eea;
+            border-radius: 20px;
+            text-align: center;
+            font-size: 14px;
+            outline: none;
+            color: #667eea;
+            background: white;
+        }
+        .page-jump input:focus {
+            border-color: #764ba2;
+        }
+        .page-jump input::placeholder {
+            color: #a5b4fc;
+            font-weight: 400;
+            font-size: 12px;
+        }
+        .jump-btn {
+            padding: 6px 14px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        .jump-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
         footer {
             max-width: 1200px;
             margin: 30px auto 0;
@@ -369,7 +410,7 @@
             id: 'naruto',
             title: '新旧写真',
             cover: 'xiezhenxiliexiangce/x29.jpg',
-            perPage: 30,   // 单独设置每页30张
+            perPage: 30,
             photos: [
                 ...Array.from({ length: 183 }, (_, i) => `xiezhenxiliexiangce/x${i + 1}.jpg`)
             ]
@@ -398,7 +439,7 @@
     const seriesSubtitle = document.getElementById('seriesSubtitle');
     const backToWall = document.getElementById('backToWall');
 
-    const PHOTOS_PER_PAGE = 12;   // 全局默认每页12张
+    const PHOTOS_PER_PAGE = 12;
     let currentSeries = null;
     let currentPage = 1;
     let totalPages = 1;
@@ -431,7 +472,7 @@
         currentSeries = seriesData.find(s => s.id === seriesId);
         if (!currentSeries) return;
 
-        const perPage = currentSeries.perPage || PHOTOS_PER_PAGE;   // 优先使用系列自定义值
+        const perPage = currentSeries.perPage || PHOTOS_PER_PAGE;
         totalPages = Math.ceil(currentSeries.photos.length / perPage);
         currentPage = 1;
 
@@ -444,10 +485,10 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // ========== 3. 渲染当前系列的当前页图片（✅ 已修复：区分视频和图片）==========
+    // ========== 3. 渲染当前系列的当前页图片 ==========
     function renderSeriesPhotos() {
         seriesGallery.innerHTML = '';
-        const perPage = currentSeries.perPage || PHOTOS_PER_PAGE;   // 使用系列自定义值
+        const perPage = currentSeries.perPage || PHOTOS_PER_PAGE;
         const start = (currentPage - 1) * perPage;
         const end = start + perPage;
         const pagePhotos = currentSeries.photos.slice(start, end);
@@ -457,7 +498,6 @@
             item.className = 'gallery-item';
             
             if (typeof photo === 'object' && photo.type === 'video') {
-                // 视频
                 item.innerHTML = `
                     <video src="${photo.src}" poster="${photo.poster}" muted loop 
                             preload="metadata"
@@ -465,12 +505,10 @@
                     <span class="play-btn"></span>
                 `;
             } else {
-                // 图片
                 const imgSrc = typeof photo === 'string' ? photo : photo.src;
                 item.innerHTML = `<img src="${imgSrc}" alt="${currentSeries.title} ${start + idx + 1}">`;
             }
             
-            // 点击 → 灯箱
             item.addEventListener('click', () => openLightbox(start + idx));
             seriesGallery.appendChild(item);
         });
@@ -478,11 +516,12 @@
         renderSeriesPagination();
     }
 
-    // ========== 4. 系列内分页 ==========
+    // ========== 4. 系列内分页（含跳转框）==========
     function renderSeriesPagination() {
         seriesPagination.innerHTML = '';
         if (totalPages <= 1) return;
 
+        // 上一页
         const prevBtn = document.createElement('button');
         prevBtn.className = 'page-btn';
         prevBtn.textContent = '上一页';
@@ -496,6 +535,7 @@
         };
         seriesPagination.appendChild(prevBtn);
 
+        // 页码数字
         for (let i = 1; i <= totalPages; i++) {
             const btn = document.createElement('button');
             btn.className = 'page-btn';
@@ -509,6 +549,7 @@
             seriesPagination.appendChild(btn);
         }
 
+        // 下一页
         const nextBtn = document.createElement('button');
         nextBtn.className = 'page-btn';
         nextBtn.textContent = '下一页';
@@ -521,6 +562,38 @@
             }
         };
         seriesPagination.appendChild(nextBtn);
+
+        // ====== 页码跳转输入框 ======
+        const jumpBox = document.createElement('div');
+        jumpBox.className = 'page-jump';
+        jumpBox.innerHTML = `
+            <input type="number" id="jumpInput" min="1" max="${totalPages}" placeholder="共${totalPages}页">
+            <button class="jump-btn" id="jumpBtn">跳转</button>
+        `;
+        seriesPagination.appendChild(jumpBox);
+
+        const jumpInput = document.getElementById('jumpInput');
+        const jumpBtn = document.getElementById('jumpBtn');
+        
+        jumpBtn.addEventListener('click', handleJump);
+        jumpInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') handleJump();
+        });
+
+        function handleJump() {
+            const value = parseInt(jumpInput.value);
+            if (isNaN(value)) {
+                jumpInput.value = '';
+                return;
+            }
+            const targetPage = Math.max(1, Math.min(value, totalPages));
+            if (targetPage !== currentPage) {
+                currentPage = targetPage;
+                renderSeriesPhotos();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            jumpInput.value = '';
+        }
     }
 
     // ========== 5. 返回封面墙 ==========
@@ -530,7 +603,7 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    // ========== 6. 灯箱（✅ 已修复：兼容视频）==========
+    // ========== 6. 灯箱（兼容视频）==========
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightboxImg');
     const lightboxClose = document.getElementById('lightboxClose');
@@ -549,7 +622,6 @@
     function updateLightbox() {
         const photo = lightboxPhotos[lightboxIndex];
         
-        // 清除旧视频
         const oldVideo = lightbox.querySelector('video');
         if (oldVideo) {
             oldVideo.pause();
@@ -557,7 +629,6 @@
         }
         
         if (typeof photo === 'object' && photo.type === 'video') {
-            // 视频
             lightboxImg.style.display = 'none';
             const v = document.createElement('video');
             v.src = photo.src;
@@ -568,7 +639,6 @@
             v.style.borderRadius = '12px';
             lightbox.appendChild(v);
         } else {
-            // 图片
             const imgSrc = typeof photo === 'string' ? photo : photo.src;
             lightboxImg.style.display = '';
             lightboxImg.src = imgSrc;
