@@ -3,13 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>私密自拍 - 阿情killy</title>
+    <title>动漫写真馆 - 阿情killy</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -45,34 +41,84 @@
             font-weight: 500;
             transition: transform 0.3s;
         }
+        .back-btn:hover { transform: translateY(-2px); }
 
-        .back-btn:hover {
-            transform: translateY(-2px);
+        .content { font-size: 16px; line-height: 2; color: #475569; }
+        .subtitle { text-align: center; color: #64748b; margin-bottom: 40px; }
+
+        /* 视图切换 */
+        .view { display: none; animation: fadeIn 0.3s ease; }
+        .view.active { display: block; }
+
+        /* 返回按钮 */
+        .back-to-wall {
+            display: inline-block;
+            margin-bottom: 30px;
+            padding: 10px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .back-to-wall:hover { transform: translateY(-2px); }
+
+        /* 封面墙网格 */
+        .cover-wall {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
         }
 
-        .content {
-            font-size: 16px;
-            line-height: 2;
-            color: #475569;
+        .cover-card {
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
         }
-
-        .subtitle {
-            text-align: center;
-            color: #64748b;
-            margin-bottom: 40px;
+        .cover-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
         }
-
-        /* 单页容器 */
-        .page {
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .page.active {
+        .cover-card img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
             display: block;
+            transition: transform 0.3s;
+        }
+        .cover-card:hover img { transform: scale(1.05); }
+
+        .cover-info {
+            padding: 18px 20px;
+            background: white;
+        }
+        .cover-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+        .cover-count {
+            font-size: 13px;
+            color: #94a3b8;
+        }
+        .cover-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(0,0,0,0.65);
+            color: #fff;
+            font-size: 12px;
+            padding: 4px 12px;
+            border-radius: 20px;
         }
 
-        /* 图片相册网格 */
+        /* 系列图片网格 */
         .gallery {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
@@ -84,75 +130,91 @@
             border-radius: 12px;
             overflow: hidden;
             height: 220px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
             transition: transform 0.3s, box-shadow 0.3s;
             cursor: zoom-in;
         }
-
         .gallery-item:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
         }
-
         .gallery-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             transition: transform 0.3s;
         }
+        .gallery-item:hover img { transform: scale(1.05); }
 
-        .gallery-item:hover img {
-            transform: scale(1.05);
+        /* 灯箱 */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            cursor: zoom-out;
+        }
+        .lightbox.active { display: flex; }
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90vh;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
         }
 
-        /* ===== gallery-item 里的 video ===== */
-        .gallery-item video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s;
-            display: block;
-        }
-
-        .gallery-item:hover video {
-            transform: scale(1.05);
-        }
-
-        /* ===== 悬停播放按钮 ▶ ===== */
-        .gallery-item .play-btn {
+        /* 灯箱左右切换 */
+        .lb-nav {
             position: absolute;
             top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.8);
-            width: 56px;
-            height: 56px;
-            background: rgba(0, 0, 0, 0.55);
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.5);
+            color: white;
+            font-size: 36px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            opacity: 0;
-            transition: opacity 0.25s, transform 0.25s;
-            pointer-events: none;
+            cursor: pointer;
+            z-index: 10000;
+            transition: background 0.3s;
+        }
+        .lb-nav:hover { background: rgba(0,0,0,0.8); }
+        .lb-prev { left: 20px; }
+        .lb-next { right: 20px; }
+        .lb-count {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            background: rgba(0,0,0,0.5);
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 15px;
+            z-index: 10000;
         }
 
-        .gallery-item .play-btn::after {
-            content: '';
-            display: block;
-            width: 0;
-            height: 0;
-            border-style: solid;
-            border-width: 10px 0 10px 18px;
-            border-color: transparent transparent transparent #fff;
-            margin-left: 3px;
+        .lightbox-close {
+            position: absolute;
+            top: 30px; right: 30px;
+            color: white;
+            font-size: 40px;
+            font-weight: 300;
+            cursor: pointer;
+            transition: transform 0.3s;
+            line-height: 1;
+            z-index: 10000;
         }
+        .lightbox-close:hover { transform: rotate(90deg); }
 
-        .gallery-item:hover .play-btn {
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1);
-        }
-
-        /* 分页按钮 */
+        /* 分页 */
         .pagination {
             display: flex;
             justify-content: center;
@@ -161,7 +223,6 @@
             margin-top: 50px;
             flex-wrap: wrap;
         }
-
         .page-btn {
             padding: 8px 18px;
             border: 2px solid #667eea;
@@ -170,126 +231,21 @@
             border-radius: 50px;
             cursor: pointer;
             font-weight: 500;
-            transition: all 0.3s;
             font-size: 14px;
-            user-select: none;
+            transition: all 0.3s;
         }
-
         .page-btn:hover:not(.disabled):not(.active) {
             background: #f0f0ff;
             transform: translateY(-2px);
         }
-
         .page-btn.active {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border-color: transparent;
         }
-
         .page-btn.disabled {
             opacity: 0.4;
             cursor: not-allowed;
-            transform: none !important;
-        }
-
-        .page-jump {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            margin-left: 10px;
-        }
-
-        .page-jump input {
-            width: 55px;
-            padding: 7px 10px;
-            border: 2px solid #667eea;
-            border-radius: 50px;
-            text-align: center;
-            font-size: 14px;
-            font-weight: 500;
-            color: #667eea;
-            outline: none;
-            transition: border-color 0.3s;
-            background: white;
-        }
-
-        .page-jump input:focus {
-            border-color: #764ba2;
-        }
-
-        .page-jump input::placeholder {
-            color: #a5b4fc;
-            font-weight: 400;
-            font-size: 12px;
-        }
-
-        .jump-btn {
-            padding: 7px 14px;
-            border: 2px solid #667eea;
-            background: white;
-            color: #667eea;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 500;
-            font-size: 14px;
-            transition: all 0.3s;
-        }
-
-        .jump-btn:hover {
-            background: #f0f0ff;
-            transform: translateY(-2px);
-        }
-
-        /* 灯箱 */
-        .lightbox {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            z-index: 9999;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            cursor: zoom-out;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .lightbox.active {
-            display: flex;
-        }
-
-        .lightbox img {
-            max-width: 90%;
-            max-height: 90vh;
-            border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-        }
-
-        .lightbox video {
-            max-width: 90%;
-            max-height: 90vh;
-            border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-        }
-
-        .lightbox-close {
-            position: absolute;
-            top: 30px;
-            right: 30px;
-            color: white;
-            font-size: 40px;
-            font-weight: 300;
-            cursor: pointer;
-            transition: transform 0.3s;
-            line-height: 1;
-            user-select: none;
-        }
-
-        .lightbox-close:hover {
-            transform: rotate(90deg);
         }
 
         footer {
@@ -301,54 +257,22 @@
             padding: 30px 5%;
             border-radius: 20px;
         }
+        footer p { margin-bottom: 8px; font-size: 14px; }
 
-        footer p {
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         @media (max-width: 900px) {
-            .gallery {
-                grid-template-columns: repeat(3, 1fr);
-            }
-            .gallery-item {
-                height: 200px;
-            }
+            .cover-wall { grid-template-columns: repeat(2, 1fr); }
+            .gallery { grid-template-columns: repeat(3, 1fr); }
+            .gallery-item { height: 200px; }
         }
-
         @media (max-width: 600px) {
-            body {
-                padding: 30px 3%;
-            }
-            .container {
-                padding: 30px 20px;
-            }
-            .gallery {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .gallery-item {
-                height: 180px;
-            }
-            .lightbox-close {
-                top: 20px;
-                right: 20px;
-                font-size: 32px;
-            }
-            .page-btn {
-                padding: 6px 14px;
-                font-size: 13px;
-            }
-            .page-jump {
-                margin-left: 0;
-                margin-top: 8px;
-                width: 100%;
-                justify-content: center;
-            }
+            body { padding: 30px 3%; }
+            .container { padding: 30px 20px; }
+            .cover-card img { height: 220px; }
+            .gallery { grid-template-columns: repeat(2, 1fr); }
+            .gallery-item { height: 180px; }
+            .cover-wall { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -356,279 +280,22 @@
 
     <div class="container">
         <a href="index.html" class="back-btn">← 返回首页</a>
-        <h1>私密自拍</h1>
+        <h1>动漫写真馆</h1>
         <div class="content">
 
-            <!-- ========== 第 1 页 ========== -->
-            <div class="page active" data-page="1">
-                <p class="subtitle">「阿情killy私密自拍」 第 1 页</p>
-                <div class="gallery">
-                    <!-- ★ sp1.mp4 + sp1.jpg -->
-                    <div class="gallery-item">
-                        <video src="xiezhenxiliexiangce/sp1.mp4"
-                               poster="xiezhenxiliexiangce/sp1.jpg"
-                               muted loop preload="metadata"
-                               style="width:100%;height:100%;object-fit:cover;display:block;">
-                        </video>
-                        <span class="play-btn"></span>
-                    </div>
-                    <!-- ★ sp2.mp4 + sp2.jpg -->
-                    <div class="gallery-item">
-                        <video src="xiezhenxiliexiangce/sp2.mp4"
-                               poster="xiezhenxiliexiangce/sp2.jpg"
-                               muted loop preload="metadata"
-                               style="width:100%;height:100%;object-fit:cover;display:block;"></video>
-                        <span class="play-btn"></span>
-                    </div>
-                    <!-- ★ sp3.mp4 + sp3.jpg -->
-                    <div class="gallery-item">
-                        <video src="xiezhenxiliexiangce/sp3.mp4"
-                               poster="xiezhenxiliexiangce/sp3.jpg"
-                               muted loop preload="metadata"
-                               style="width:100%;height:100%;object-fit:cover;display:block;"></video>
-                        <span class="play-btn"></span>
-                    </div>
-                    <!-- ★ sp4.mp4 + sp4.jpg -->
-                    <div class="gallery-item">
-                        <video src="xiezhenxiliexiangce/sp4.mp4"
-                               poster="xiezhenxiliexiangce/sp4.jpg"
-                               muted loop preload="metadata"
-                               style="width:100%;height:100%;object-fit:cover;display:block;">
-                        </video>
-                        <span class="play-btn"></span>
-                    </div>
-                    <!-- ★ images/5.mp4 兜底 sp.jpg -->
-                     <div class="gallery-item">
-                        <video src="xiezhenxiliexiangce/sp5.mp4"
-                               poster="xiezhenxiliexiangce/sp5.jpg"
-                               muted loop preload="metadata"
-                               style="width:100%;height:100%;object-fit:cover;display:block;">
-                        </video>
-                        <span class="play-btn"></span>
-                    </div>
-                    <!-- ★ images/6.mp4 兜底 sp.jpg -->
-                    <div class="gallery-item">
-                        <video src="xiezhenxiliexiangce/sp6.mp4"
-                               poster="xiezhenxiliexiangce/sp6.jpg"
-                               muted loop preload="metadata"
-                               style="width:100%;height:100%;object-fit:cover;display:block;">
-                        </video>
-                        <span class="play-btn"></span>
-                    </div>
-                    <div class="gallery-item">
-                        <img src="xiezhenxiliexiangce/sp7.jpg" alt="性感7">
-                    </div>
-                    <div class="gallery-item">
-                        <img src="xiezhenxiliexiangce/sp8.jpg" alt="性感8">
-                    </div>
-                    <div class="gallery-item">
-                        <video src="xiezhenxiliexiangce/sp9.mp4"
-                               poster="xiezhenxiliexiangce/sp9.jpg"
-                               muted loop preload="metadata"
-                               style="width:100%;height:100%;object-fit:cover;display:block;">
-                        </video>
-                        <span class="play-btn"></span>
-                    </div>
-                    <div class="gallery-item">
-                        <video src="xiezhenxiliexiangce/sp10.mp4"
-                               poster="xiezhenxiliexiangce/sp10.jpg"
-                               muted loop preload="metadata"
-                               style="width:100%;height:100%;object-fit:cover;display:block;">
-                        </video>
-                        <span class="play-btn"></span>
-                    </div>
-                    <div class="gallery-item">
-                        <video src="xiezhenxiliexiangce/sp11.mp4"
-                               poster="xiezhenxiliexiangce/sp11.jpg"
-                               muted loop preload="metadata"
-                               style="width:100%;height:100%;object-fit:cover;display:block;">
-                        </video>
-                        <span class="play-btn"></span>
-                    </div>
-                    <div class="gallery-item">
-                        <video src="xiezhenxiliexiangce/sp12.mp4"
-                               poster="xiezhenxiliexiangce/sp12.jpg"
-                               muted loop preload="metadata"
-                               style="width:100%;height:100%;object-fit:cover;display:block;">
-                        </video>
-                        <span class="play-btn"></span>
-                    </div>
-                    <div class="gallery-item">
-                        <video src="xiezhenxiliexiangce/sp13.mp4"
-                               poster="xiezhenxiliexiangce/sp13.jpg"
-                               muted loop preload="metadata"
-                               style="width:100%;height:100%;object-fit:cover;display:block;">
-                        </video>
-                        <span class="play-btn"></span>
-                    </div>
-                    <div class="gallery-item">
-                        <video src="xiezhenxiliexiangce/sp14.mp4"
-                               poster="xiezhenxiliexiangce/sp14.jpg"
-                               muted loop preload="metadata"
-                               style="width:100%;height:100%;object-fit:cover;display:block;">
-                        </video>
-                        <span class="play-btn"></span>
-                    </div>
-                    <div class="gallery-item">
-                        <img src="xiezhenxiliexiangce/sp15.jpg" alt="性感8">
-                    </div>
-                    <div class="gallery-item">
-                        <video src="xiezhenxiliexiangce/sp16.mp4"
-                               poster="xiezhenxiliexiangce/sp16.jpg"
-                               muted loop preload="metadata"
-                               style="width:100%;height:100%;object-fit:cover;display:block;">
-                        </video>
-                        <span class="play-btn"></span>
-                    </div>
-                    <div class="gallery-item">
-                        <video src="xiezhenxiliexiangce/sp17.mp4"
-                               poster="xiezhenxiliexiangce/sp17.jpg"
-                               muted loop preload="metadata"
-                               style="width:100%;height:100%;object-fit:cover;display:block;">
-                        </video>
-                        <span class="play-btn"></span>
-                    </div>
-                    <div class="gallery-item">
-                        <video src="xiezhenxiliexiangce/sp18.mp4"
-                               poster="xiezhenxiliexiangce/sp18.jpg"
-                               muted loop preload="metadata"
-                               style="width:100%;height:100%;object-fit:cover;display:block;">
-                        </video>
-                        <span class="play-btn"></span>
-                    </div>
-                    <div class="gallery-item">
-                        <video src="xiezhenxiliexiangce/sp.mp4"
-                               poster="xiezhenxiliexiangce/sp.jpg"
-                               muted loop preload="metadata"
-                               style="width:100%;height:100%;object-fit:cover;display:block;">
-                        </video>
-                        <span class="play-btn"></span>
-                    </div>
-                    <div class="gallery-item">
-                        <video src="xiezhenxiliexiangce/sp.mp4"
-                               poster="xiezhenxiliexiangce/sp.jpg"
-                               muted loop preload="metadata"
-                               style="width:100%;height:100%;object-fit:cover;display:block;">
-                        </video>
-                        <span class="play-btn"></span>
-                    </div>
-                    <div class="gallery-item">
-                        <video src="xiezhenxiliexiangce/sp.mp4"
-                               poster="xiezhenxiliexiangce/sp.jpg"
-                               muted loop preload="metadata"
-                               style="width:100%;height:100%;object-fit:cover;display:block;">
-                        </video>
-                        <span class="play-btn"></span>
-                    </div>
-                    <div class="gallery-item">
-                        <video src="xiezhenxiliexiangce/sp.mp4"
-                               poster="xiezhenxiliexiangce/sp.jpg"
-                               muted loop preload="metadata"
-                               style="width:100%;height:100%;object-fit:cover;display:block;">
-                        </video>
-                        <span class="play-btn"></span>
-                    </div>
-                    <div class="gallery-item">
-                        <video src="xiezhenxiliexiangce/sp.mp4"
-                               poster="xiezhenxiliexiangce/sp.jpg"
-                               muted loop preload="metadata"
-                               style="width:100%;height:100%;object-fit:cover;display:block;">
-                        </video>
-                        <span class="play-btn"></span>
-                    </div>
-                    <div class="gallery-item">
-                        <video src="xiezhenxiliexiangce/sp.mp4"
-                               poster="xiezhenxiliexiangce/sp.jpg"
-                               muted loop preload="metadata"
-                               style="width:100%;height:100%;object-fit:cover;display:block;">
-                        </video>
-                        <span class="play-btn"></span>
-                    </div>
-                    <div class="gallery-item">
-                        <video src="xiezhenxiliexiangce/sp.mp4"
-                               poster="xiezhenxiliexiangce/sp.jpg"
-                               muted loop preload="metadata"
-                               style="width:100%;height:100%;object-fit:cover;display:block;">
-                        </video>
-                        <span class="play-btn"></span>
-                    </div>
-                    <div class="gallery-item">
-                        <video src="xiezhenxiliexiangce/sp.mp4"
-                               poster="xiezhenxiliexiangce/sp.jpg"
-                               muted loop preload="metadata"
-                               style="width:100%;height:100%;object-fit:cover;display:block;">
-                        </video>
-                        <span class="play-btn"></span>
-                    </div>
-                    <div class="gallery-item">
-                        <video src="xiezhenxiliexiangce/sp.mp4"
-                               poster="xiezhenxiliexiangce/sp.jpg"
-                               muted loop preload="metadata"
-                               style="width:100%;height:100%;object-fit:cover;display:block;">
-                        </video>
-                        <span class="play-btn"></span>
-                    </div>
-                    <div class="gallery-item">
-                        <video src="xiezhenxiliexiangce/sp.mp4"
-                               poster="xiezhenxiliexiangce/sp.jpg"
-                               muted loop preload="metadata"
-                               style="width:100%;height:100%;object-fit:cover;display:block;">
-                        </video>
-                        <span class="play-btn"></span>
-                    </div>
-                    <div class="gallery-item">
-                        <video src="xiezhenxiliexiangce/sp.mp4"
-                               poster="xiezhenxiliexiangce/sp.jpg"
-                               muted loop preload="metadata"
-                               style="width:100%;height:100%;object-fit:cover;display:block;">
-                        </video>
-                        <span class="play-btn"></span>
-                    </div>
-                    <div class="gallery-item">
-                        <video src="xiezhenxiliexiangce/sp.mp4"
-                               poster="xiezhenxiliexiangce/sp.jpg"
-                               muted loop preload="metadata"
-                               style="width:100%;height:100%;object-fit:cover;display:block;">
-                        </video>
-                        <span class="play-btn"></span>
-                    </div>
-                </div>
+            <!-- ========== 视图1：系列封面墙 ========== -->
+            <div class="view active" id="viewWall">
+                <p class="subtitle">「阿情killy」 系列封面墙 — 点击封面进入该系列</p>
+                <div class="cover-wall" id="coverWall"><!-- JS 动态生成 --></div>
             </div>
 
-            <!-- ========== 第 2 页 ========== -->
-            <div class="page" data-page="2">
-                <p class="subtitle">第 2 页</p>
-                <div class="gallery">
-                    <!-- 兜底 sp.jpg -->
-                    <div class="gallery-item">
-                        <video src="images/7.mp4" poster="xiezhenxiliexiangce/sp.jpg" muted loop preload="metadata" style="width:100%;height:100%;object-fit:cover;display:block;"></video>
-                        <span class="play-btn"></span>
-                    </div>
-                    <div class="gallery-item">
-                        <video src="images/8.mp4" poster="xiezhenxiliexiangce/sp.jpg" muted loop preload="metadata" style="width:100%;height:100%;object-fit:cover;display:block;"></video>
-                        <span class="play-btn"></span>
-                    </div>
-                    <div class="gallery-item">
-                        <video src="images/9.mp4" poster="xiezhenxiliexiangce/sp.jpg" muted loop preload="metadata" style="width:100%;height:100%;object-fit:cover;display:block;"></video>
-                        <span class="play-btn"></span>
-                    </div>
-                    <div class="gallery-item">
-                        <video src="images/10.mp4" poster="xiezhenxiliexiangce/sp.jpg" muted loop preload="metadata" style="width:100%;height:100%;object-fit:cover;display:block;"></video>
-                        <span class="play-btn"></span>
-                    </div>
-                    <div class="gallery-item">
-                        <video src="images/11.mp4" poster="xiezhenxiliexiangce/sp.jpg" muted loop preload="metadata" style="width:100%;height:100%;object-fit:cover;display:block;"></video>
-                        <span class="play-btn"></span>
-                    </div>
-                    <div class="gallery-item">
-                        <video src="images/12.mp4" poster="xiezhenxiliexiangce/sp.jpg" muted loop preload="metadata" style="width:100%;height:100%;object-fit:cover;display:block;"></video>
-                        <span class="play-btn"></span>
-                    </div>
-                </div>
+            <!-- ========== 视图2：某个系列的详情页 ========== -->
+            <div class="view" id="viewSeries">
+                <span class="back-to-wall" id="backToWall">← 返回封面墙</span>
+                <p class="subtitle" id="seriesSubtitle"></p>
+                <div class="gallery" id="seriesGallery"><!-- JS 动态生成 --></div>
+                <div class="pagination" id="seriesPagination"></div>
             </div>
-
-            <!-- 分页控件 -->
-            <div class="pagination" id="pagination"></div>
 
         </div>
     </div>
@@ -647,158 +314,252 @@
     <!-- 灯箱 -->
     <div class="lightbox" id="lightbox">
         <span class="lightbox-close" id="lightboxClose">&times;</span>
+        <div class="lb-nav lb-prev" id="lbPrev">‹</div>
+        <div class="lb-nav lb-next" id="lbNext">›</div>
+        <div class="lb-count" id="lbCount"></div>
         <img src="" alt="原图" id="lightboxImg">
     </div>
 
     <script>
-        // ========== 灯箱（兼容 img + video）==========
-        const lightbox = document.getElementById('lightbox');
-        const lightboxImg = document.getElementById('lightboxImg');
-        const lightboxClose = document.getElementById('lightboxClose');
-        const galleries = document.querySelectorAll('.gallery');
-
-        function clearLightbox() {
-            const oldVideo = lightbox.querySelector('video');
-            if (oldVideo) {
-                oldVideo.pause();
-                oldVideo.remove();
-            }
-            lightboxImg.style.display = '';
-            lightboxImg.src = '';
+    // ========================================================
+    //  数据：所有系列（你按自己的文件夹改路径就行）
+    //  cover   = 封面图
+    //  photos  = 该系列的所有图片路径（只属于这一个系列）
+    // ========================================================
+    const seriesData = [
+        {
+            id: 'dbz',
+            title: '七龙珠',
+            cover: 'images/dbz/cover.jpg',
+            photos: [
+                'images/dbz/01.jpg',
+                'images/dbz/02.jpg',
+                'images/dbz/03.jpg',
+                'images/dbz/04.jpg',
+                'images/dbz/05.jpg',
+                'images/dbz/06.jpg',
+                'images/dbz/07.jpg',
+                'images/dbz/08.jpg'
+                // 继续加该系列的图...
+            ]
+        },
+        {
+            id: 'naruto',
+            title: '火影忍者',
+            cover: 'images/naruto/cover.jpg',
+            photos: [
+                'images/naruto/01.jpg',
+                'images/naruto/02.jpg',
+                'images/naruto/03.jpg',
+                'images/naruto/04.jpg',
+                'images/naruto/05.jpg',
+                'images/naruto/06.jpg',
+                'images/naruto/07.jpg',
+                'images/naruto/08.jpg',
+                'images/naruto/09.jpg',
+                'images/naruto/10.jpg'
+                // 继续加该系列的图...
+            ]
+        },
+        {
+            id: 'onepiece',
+            title: '海贼王',
+            cover: 'images/onepiece/cover.jpg',
+            photos: [
+                'images/onepiece/01.jpg',
+                'images/onepiece/02.jpg',
+                'images/onepiece/03.jpg',
+                'images/onepiece/04.jpg',
+                'images/onepiece/05.jpg'
+                // 继续加...
+            ]
         }
+        // 想加更多系列？直接照着上面复制一个对象进来就行
+    ];
 
-        galleries.forEach(gallery => {
-            gallery.addEventListener('click', (e) => {
-                const target = e.target;
-                if (target.tagName !== 'IMG' && target.tagName !== 'VIDEO') return;
+    // ========== 元素 ==========
+    const viewWall = document.getElementById('viewWall');
+    const viewSeries = document.getElementById('viewSeries');
+    const coverWall = document.getElementById('coverWall');
+    const seriesGallery = document.getElementById('seriesGallery');
+    const seriesPagination = document.getElementById('seriesPagination');
+    const seriesSubtitle = document.getElementById('seriesSubtitle');
+    const backToWall = document.getElementById('backToWall');
 
-                clearLightbox();
+    const PHOTOS_PER_PAGE = 12;
+    let currentSeries = null;
+    let currentPage = 1;
+    let totalPages = 1;
 
-                if (target.tagName === 'IMG') {
-                    lightboxImg.src = target.src;
-                    lightboxImg.alt = target.alt || '原图';
-                } else if (target.tagName === 'VIDEO') {
-                    lightboxImg.style.display = 'none';
-                    const v = document.createElement('video');
-                    v.src = target.src;
-                    v.controls = true;
-                    v.autoplay = true;
-                    v.style.maxWidth = '90%';
-                    v.style.maxHeight = '90vh';
-                    v.style.borderRadius = '12px';
-                    v.style.boxShadow = '0 10px 40px rgba(0,0,0,0.5)';
-                    lightbox.appendChild(v);
-                }
+    // 灯箱状态
+    let lightboxPhotos = [];
+    let lightboxIndex = 0;
 
-                lightbox.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            });
-        });
-
-        function closeLightbox() {
-            const playingVideo = lightbox.querySelector('video');
-            if (playingVideo) playingVideo.pause();
-            lightbox.classList.remove('active');
-            document.body.style.overflow = '';
-            setTimeout(clearLightbox, 300);
-        }
-
-        lightboxClose.addEventListener('click', closeLightbox);
-        lightbox.addEventListener('click', (e) => {
-            if (e.target === lightbox) closeLightbox();
-        });
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && lightbox.classList.contains('active')) closeLightbox();
-        });
-
-        // ========== 翻页 ==========
-        const pages = document.querySelectorAll('.page');
-        const pagination = document.getElementById('pagination');
-        let currentPage = 1;
-        const totalPages = pages.length;
-
-        function renderPagination() {
-            pagination.innerHTML = '';
-
-            const prevBtn = document.createElement('button');
-            prevBtn.className = 'page-btn prev-btn';
-            prevBtn.textContent = '上一页';
-            if (currentPage === 1) prevBtn.classList.add('disabled');
-            prevBtn.addEventListener('click', () => goToPage(currentPage - 1));
-            pagination.appendChild(prevBtn);
-
-            for (let i = 1; i <= totalPages; i++) {
-                const pageBtn = document.createElement('button');
-                pageBtn.className = 'page-btn';
-                pageBtn.textContent = i;
-                if (i === currentPage) pageBtn.classList.add('active');
-                pageBtn.addEventListener('click', () => goToPage(i));
-                pagination.appendChild(pageBtn);
-            }
-
-            const nextBtn = document.createElement('button');
-            nextBtn.className = 'page-btn next-btn';
-            nextBtn.textContent = '下一页';
-            if (currentPage === totalPages) nextBtn.classList.add('disabled');
-            nextBtn.addEventListener('click', () => goToPage(currentPage + 1));
-            pagination.appendChild(nextBtn);
-
-            const jumpBox = document.createElement('div');
-            jumpBox.className = 'page-jump';
-            jumpBox.innerHTML = `
-                <input type="number" id="jumpInput" min="1" max="${totalPages}" placeholder="共${totalPages}页">
-                <button class="jump-btn" id="jumpBtn">跳转</button>
+    // ========== 1. 渲染封面墙 ==========
+    function renderCoverWall() {
+        coverWall.innerHTML = '';
+        seriesData.forEach(series => {
+            const card = document.createElement('div');
+            card.className = 'cover-card';
+            card.innerHTML = `
+                <img src="${series.cover}" alt="${series.title}">
+                <div class="cover-badge">${series.photos.length} 张</div>
+                <div class="cover-info">
+                    <div class="cover-title">${series.title}</div>
+                    <div class="cover-count">点击进入 · 共 ${series.photos.length} 张</div>
+                </div>
             `;
-            pagination.appendChild(jumpBox);
+            card.addEventListener('click', () => openSeries(series.id));
+            coverWall.appendChild(card);
+        });
+    }
 
-            const jumpInput = document.getElementById('jumpInput');
-            const jumpBtn = document.getElementById('jumpBtn');
-            jumpBtn.addEventListener('click', handleJump);
-            jumpInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') handleJump();
+    // ========== 2. 打开某个系列 ==========
+    function openSeries(seriesId) {
+        currentSeries = seriesData.find(s => s.id === seriesId);
+        if (!currentSeries) return;
+
+        totalPages = Math.ceil(currentSeries.photos.length / PHOTOS_PER_PAGE);
+        currentPage = 1;
+
+        seriesSubtitle.textContent = `「${currentSeries.title}」 共 ${currentSeries.photos.length} 张`;
+        
+        viewWall.classList.remove('active');
+        viewSeries.classList.add('active');
+        
+        renderSeriesPhotos();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ========== 3. 渲染当前系列的当前页图片 ==========
+    function renderSeriesPhotos() {
+        seriesGallery.innerHTML = '';
+        const start = (currentPage - 1) * PHOTOS_PER_PAGE;
+        const end = start + PHOTOS_PER_PAGE;
+        const pagePhotos = currentSeries.photos.slice(start, end);
+
+        pagePhotos.forEach((photoSrc, idx) => {
+            const item = document.createElement('div');
+            item.className = 'gallery-item';
+            item.innerHTML = `<img src="${photoSrc}" alt="${currentSeries.title} ${start + idx + 1}">`;
+            // 点击图片 → 灯箱，从该系列全局图片数组的对应位置打开
+            item.querySelector('img').addEventListener('click', () => {
+                openLightbox(start + idx);
             });
+            seriesGallery.appendChild(item);
+        });
+
+        renderSeriesPagination();
+    }
+
+    // ========== 4. 系列内分页 ==========
+    function renderSeriesPagination() {
+        seriesPagination.innerHTML = '';
+        if (totalPages <= 1) return;
+
+        const prevBtn = document.createElement('button');
+        prevBtn.className = 'page-btn';
+        prevBtn.textContent = '上一页';
+        if (currentPage === 1) prevBtn.classList.add('disabled');
+        prevBtn.onclick = () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderSeriesPhotos();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        };
+        seriesPagination.appendChild(prevBtn);
+
+        for (let i = 1; i <= totalPages; i++) {
+            const btn = document.createElement('button');
+            btn.className = 'page-btn';
+            btn.textContent = i;
+            if (i === currentPage) btn.classList.add('active');
+            btn.onclick = () => {
+                currentPage = i;
+                renderSeriesPhotos();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            };
+            seriesPagination.appendChild(btn);
         }
 
-        function handleJump() {
-            const jumpInput = document.getElementById('jumpInput');
-            const value = parseInt(jumpInput.value);
-            if (isNaN(value)) { jumpInput.value = ''; return; }
-            goToPage(Math.max(1, Math.min(value, totalPages)));
-            jumpInput.value = '';
+        const nextBtn = document.createElement('button');
+        nextBtn.className = 'page-btn';
+        nextBtn.textContent = '下一页';
+        if (currentPage === totalPages) nextBtn.classList.add('disabled');
+        nextBtn.onclick = () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderSeriesPhotos();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        };
+        seriesPagination.appendChild(nextBtn);
+    }
+
+    // ========== 5. 返回封面墙 ==========
+    backToWall.addEventListener('click', () => {
+        viewSeries.classList.remove('active');
+        viewWall.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // ========== 6. 灯箱（只在该系列内切换） ==========
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const lightboxClose = document.getElementById('lightboxClose');
+    const lbPrev = document.getElementById('lbPrev');
+    const lbNext = document.getElementById('lbNext');
+    const lbCount = document.getElementById('lbCount');
+
+    function openLightbox(index) {
+        lightboxPhotos = currentSeries.photos;  // 只绑定当前系列的图
+        lightboxIndex = index;
+        updateLightbox();
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function updateLightbox() {
+        lightboxImg.src = lightboxPhotos[lightboxIndex];
+        lbCount.textContent = `${lightboxIndex + 1} / ${lightboxPhotos.length}`;
+    }
+
+    function closeLightbox() {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    lbPrev.addEventListener('click', (e) => {
+        e.stopPropagation();
+        lightboxIndex = (lightboxIndex - 1 + lightboxPhotos.length) % lightboxPhotos.length;
+        updateLightbox();
+    });
+    lbNext.addEventListener('click', (e) => {
+        e.stopPropagation();
+        lightboxIndex = (lightboxIndex + 1) % lightboxPhotos.length;
+        updateLightbox();
+    });
+
+    lightboxClose.addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) closeLightbox();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (!lightbox.classList.contains('active')) return;
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowLeft') {
+            lightboxIndex = (lightboxIndex - 1 + lightboxPhotos.length) % lightboxPhotos.length;
+            updateLightbox();
         }
-
-        function goToPage(pageNum) {
-    if (pageNum < 1 || pageNum > totalPages || pageNum === currentPage) return;
-
-    // 1. 清理上一页的视频（暂停并移除，释放内存）
-    const prevPage = document.querySelector(`.page[data-page="${currentPage}"]`);
-    const prevVideos = prevPage.querySelectorAll('video');
-    prevVideos.forEach(video => {
-    video.pause();
-    video.currentTime = 0; // 重置播放进度到开头
-    // 可选：隐藏 video，显示 poster 封面
-    // video.style.display = 'none';
+        if (e.key === 'ArrowRight') {
+            lightboxIndex = (lightboxIndex + 1) % lightboxPhotos.length;
+            updateLightbox();
+        }
     });
 
-    // 2. 切换页面显示
-    prevPage.classList.remove('active');
-    const targetPage = document.querySelector(`.page[data-page="${pageNum}"]`);
-    targetPage.classList.add('active');
-
-    // 3. 立即加载目标页的图片（将 data-src 转为 src）
-    const targetImages = targetPage.querySelectorAll('img[data-src]');
-    targetImages.forEach(img => {
-        img.src = img.dataset.src;
-        img.removeAttribute('data-src');
-    });
-
-    // 4. 更新分页状态和滚动位置
-    currentPage = pageNum;
-    renderPagination();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-        renderPagination();
+    // ========== 初始化 ==========
+    renderCoverWall();
     </script>
 
     <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
