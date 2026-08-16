@@ -383,23 +383,18 @@
         },
         {
             id: 'onepiece',
-            title: '新旧视频',
-            cover: 'xiezhenxiliexiangce/sp1.jpg',
-            photos: [
-                // 🎬 视频（带封面）
-                { type: 'video', src: 'xiezhenxiliexiangce/sp1.mp4', poster: 'xiezhenxiliexiangce/sp1.jpg' },
-                { type: 'video', src: 'xiezhenxiliexiangce/sp2.mp4', poster: 'xiezhenxiliexiangce/sp2.jpg' },
-                { type: 'video', src: 'xiezhenxiliexiangce/sp3.mp4', poster: 'xiezhenxiliexiangce/sp3.jpg' },
-                { type: 'video', src: 'xiezhenxiliexiangce/sp4.mp4', poster: 'xiezhenxiliexiangce/sp4.jpg' },
-                { type: 'video', src: 'xiezhenxiliexiangce/sp5.mp4', poster: 'xiezhenxiliexiangce/sp5.jpg' },
-                { type: 'video', src: 'xiezhenxiliexiangce/sp6.mp4', poster: 'xiezhenxiliexiangce/sp6.jpg' },
-                { type: 'video', src: 'xiezhenxiliexiangce/sp7.mp4', poster: 'xiezhenxiliexiangce/sp7.jpg' },
-                { type: 'video', src: 'xiezhenxiliexiangce/sp8.mp4', poster: 'xiezhenxiliexiangce/sp8.jpg' },
-                
-                // 🖼️ 图片
-                'xiezhenxiliexiangce/sp.jpg',
-                'xiezhenxiliexiangce/sp.jpg'
-                // 继续加...
+    title: '新旧视频',
+    cover: 'xiezhenxiliexiangce/sp1.jpg',
+    photos: [
+        // 🎬 视频 sp1.mp4 ~ sp8.mp4
+        ...Array.from({ length: 15 }, (_, i) => ({
+            type: 'video',
+            src: `xiezhenxiliexiangce/sp${i + 1}.mp4`,
+            poster: `xiezhenxiliexiangce/sp${i + 1}.jpg`
+        })),
+        
+        // 🖼️ 图片 sp9.jpg ~ sp30.jpg
+        ...Array.from({ length: 22 }, (_, i) => `xiezhenxiliexiangce/sp${i + 9}.jpg`)
             ]
         }
     ];
