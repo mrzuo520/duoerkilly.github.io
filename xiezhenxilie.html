@@ -372,10 +372,8 @@
             title: '新旧写真',
             cover: 'xiezhenxiliexiangce/sp5.jpg',
             photos: [
-                'xiezhenxiliexiangce/sp.jpg',
-                'xiezhenxiliexiangce/sp.jpg',
-                'xiezhenxiliexiangce/sp.jpg',
-                'xiezhenxiliexiangce/sp.jpg'
+                // 🖼️ 图片 z1.jpg ~ z30.jpg
+        ...Array.from({ length: 3 }, (_, i) => `xiezhenxiliexiangce/x${i + 1}.jpg`)
                 // 继续加...
             ]
         },
@@ -406,7 +404,7 @@
     const seriesSubtitle = document.getElementById('seriesSubtitle');
     const backToWall = document.getElementById('backToWall');
 
-    const PHOTOS_PER_PAGE = 30;
+    const PHOTOS_PER_PAGE = 12;
     let currentSeries = null;
     let currentPage = 1;
     let totalPages = 1;
