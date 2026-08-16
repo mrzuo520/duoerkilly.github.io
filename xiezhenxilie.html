@@ -359,38 +359,32 @@
     const seriesData = [
         {
             id: 'dbz',
-    title: '私拍日常',
-    cover: 'xiezhenxiliexiangce/z1.jpg',
-    photos: [
-        // 🖼️ 图片 z1.jpg ~ z30.jpg
-        ...Array.from({ length: 3 }, (_, i) => `xiezhenxiliexiangce/z${i + 1}.jpg`)
-                // 继续加...
+            title: '私拍日常',
+            cover: 'xiezhenxiliexiangce/z1.jpg',
+            photos: [
+                ...Array.from({ length: 3 }, (_, i) => `xiezhenxiliexiangce/z${i + 1}.jpg`)
             ]
         },
         {
             id: 'naruto',
             title: '新旧写真',
             cover: 'xiezhenxiliexiangce/x29.jpg',
+            perPage: 30,   // 单独设置每页30张
             photos: [
-                // 🖼️ 图片 z1.jpg ~ z30.jpg
-        ...Array.from({ length: 40 }, (_, i) => `xiezhenxiliexiangce/x${i + 1}.jpg`)
-                // 继续加...
+                ...Array.from({ length: 40 }, (_, i) => `xiezhenxiliexiangce/x${i + 1}.jpg`)
             ]
         },
         {
             id: 'onepiece',
-    title: '新旧视频',
-    cover: 'xiezhenxiliexiangce/sp1.jpg',
-    photos: [
-        // 🎬 视频 sp1.mp4 ~ sp8.mp4
-        ...Array.from({ length: 15 }, (_, i) => ({
-            type: 'video',
-            src: `xiezhenxiliexiangce/sp${i + 1}.mp4`,
-            poster: `xiezhenxiliexiangce/sp${i + 1}.jpg`
-        })),
-        
-        // 🖼️ 图片 sp9.jpg ~ sp30.jpg
-        ...Array.from({ length: 0 }, (_, i) => `xiezhenxiliexiangce/sp${i + 9}.jpg`)
+            title: '新旧视频',
+            cover: 'xiezhenxiliexiangce/sp1.jpg',
+            photos: [
+                ...Array.from({ length: 15 }, (_, i) => ({
+                    type: 'video',
+                    src: `xiezhenxiliexiangce/sp${i + 1}.mp4`,
+                    poster: `xiezhenxiliexiangce/sp${i + 1}.jpg`
+                })),
+                ...Array.from({ length: 0 }, (_, i) => `xiezhenxiliexiangce/sp${i + 9}.jpg`)
             ]
         }
     ];
@@ -404,7 +398,7 @@
     const seriesSubtitle = document.getElementById('seriesSubtitle');
     const backToWall = document.getElementById('backToWall');
 
-    const PHOTOS_PER_PAGE = 12;
+    const PHOTOS_PER_PAGE = 12;   // 全局默认每页12张
     let currentSeries = null;
     let currentPage = 1;
     let totalPages = 1;
@@ -437,7 +431,8 @@
         currentSeries = seriesData.find(s => s.id === seriesId);
         if (!currentSeries) return;
 
-        totalPages = Math.ceil(currentSeries.photos.length / PHOTOS_PER_PAGE);
+        const perPage = currentSeries.perPage || PHOTOS_PER_PAGE;   // 优先使用系列自定义值
+        totalPages = Math.ceil(currentSeries.photos.length / perPage);
         currentPage = 1;
 
         seriesSubtitle.textContent = `「${currentSeries.title}」 共 ${currentSeries.photos.length} 张`;
@@ -452,15 +447,15 @@
     // ========== 3. 渲染当前系列的当前页图片（✅ 已修复：区分视频和图片）==========
     function renderSeriesPhotos() {
         seriesGallery.innerHTML = '';
-        const start = (currentPage - 1) * PHOTOS_PER_PAGE;
-        const end = start + PHOTOS_PER_PAGE;
+        const perPage = currentSeries.perPage || PHOTOS_PER_PAGE;   // 使用系列自定义值
+        const start = (currentPage - 1) * perPage;
+        const end = start + perPage;
         const pagePhotos = currentSeries.photos.slice(start, end);
 
         pagePhotos.forEach((photo, idx) => {
             const item = document.createElement('div');
             item.className = 'gallery-item';
             
-            // ✅ 关键修复：判断是视频对象还是图片字符串
             if (typeof photo === 'object' && photo.type === 'video') {
                 // 视频
                 item.innerHTML = `
@@ -561,7 +556,6 @@
             oldVideo.remove();
         }
         
-        // ✅ 关键修复：判断是视频还是图片
         if (typeof photo === 'object' && photo.type === 'video') {
             // 视频
             lightboxImg.style.display = 'none';
