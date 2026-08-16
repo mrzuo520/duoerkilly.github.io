@@ -359,13 +359,12 @@
     const seriesData = [
         {
             id: 'dbz',
-            title: '私拍日常',
-            cover: 'xiezhenxiliexiangce/z1.jpg',
-            photos: [
-                'xiezhenxiliexiangce/z1.jpg',
-                'xiezhenxiliexiangce/z2.jpg',
-                'xiezhenxiliexiangce/z3.jpg',
-                'xiezhenxiliexiangce/z4.jpg'
+    title: '私拍日常',
+    cover: 'xiezhenxiliexiangce/z1.jpg',
+    photos: [
+        // 🖼️ 图片 z1.jpg ~ z30.jpg
+        ...Array.from({ length: 3 }, (_, i) => `xiezhenxiliexiangce/z${i + 1}.jpg`)
+                'xiezhenxiliexiangce/z.jpg'
                 // 继续加...
             ]
         },
