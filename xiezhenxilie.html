@@ -138,13 +138,43 @@
             transform: translateY(-5px);
             box-shadow: 0 8px 20px rgba(0,0,0,0.15);
         }
-        .gallery-item img {
+        .gallery-item img, .gallery-item video {
             width: 100%;
             height: 100%;
             object-fit: cover;
             transition: transform 0.3s;
         }
-        .gallery-item:hover img { transform: scale(1.05); }
+        .gallery-item:hover img, .gallery-item:hover video { transform: scale(1.05); }
+
+        .play-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%) scale(0.8);
+            width: 56px;
+            height: 56px;
+            background: rgba(0,0,0,0.55);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.25s, transform 0.25s;
+            pointer-events: none;
+        }
+        .play-btn::after {
+            content: '';
+            display: block;
+            width: 0; height: 0;
+            border-style: solid;
+            border-width: 10px 0 10px 18px;
+            border-color: transparent transparent transparent #fff;
+            margin-left: 3px;
+        }
+        .gallery-item:hover .play-btn {
+            opacity: 1;
+            transform: translate(-50%,-50%) scale(1);
+        }
 
         /* 灯箱 */
         .lightbox {
@@ -160,7 +190,7 @@
             cursor: zoom-out;
         }
         .lightbox.active { display: flex; }
-        .lightbox img {
+        .lightbox img, .lightbox video {
             max-width: 90%;
             max-height: 90vh;
             border-radius: 12px;
@@ -322,43 +352,33 @@
 
     <script>
     // ========================================================
-    //  数据：所有系列（你按自己的文件夹改路径就行）
-    //  cover   = 封面图
-    //  photos  = 该系列的所有图片路径（只属于这一个系列）
+    //  数据：所有系列
+    //  🖼️ 图片: 直接写 '路径'
+    //  🎬 视频: { type: 'video', src: 'xxx.mp4', poster: 'xxx.jpg' }
     // ========================================================
     const seriesData = [
         {
             id: 'dbz',
             title: '七龙珠',
-            cover: 'images/dbz/cover.jpg',
+            cover: 'xiezhenxiliexiangce/sp1.jpg',
             photos: [
-                'images/dbz/01.jpg',
-                'images/dbz/02.jpg',
-                'images/dbz/03.jpg',
-                'images/dbz/04.jpg',
-                'images/dbz/05.jpg',
-                'images/dbz/06.jpg',
-                'images/dbz/07.jpg',
-                'images/dbz/08.jpg'
-                // 继续加该系列的图...
+                'xiezhenxiliexiangce/sp1.jpg',
+                'xiezhenxiliexiangce/sp2.jpg',
+                'xiezhenxiliexiangce/sp3.jpg',
+                'xiezhenxiliexiangce/sp4.jpg'
+                // 继续加...
             ]
         },
         {
             id: 'naruto',
             title: '火影忍者',
-            cover: 'images/naruto/cover.jpg',
+            cover: 'xiezhenxiliexiangce/sp5.jpg',
             photos: [
-                'images/naruto/01.jpg',
-                'images/naruto/02.jpg',
-                'images/naruto/03.jpg',
-                'images/naruto/04.jpg',
-                'images/naruto/05.jpg',
-                'images/naruto/06.jpg',
-                'images/naruto/07.jpg',
-                'images/naruto/08.jpg',
-                'images/naruto/09.jpg',
-                'images/naruto/10.jpg'
-                // 继续加该系列的图...
+                'xiezhenxiliexiangce/sp5.jpg',
+                'xiezhenxiliexiangce/sp6.jpg',
+                'xiezhenxiliexiangce/sp7.jpg',
+                'xiezhenxiliexiangce/sp8.jpg'
+                // 继续加...
             ]
         },
         {
@@ -366,11 +386,17 @@
             title: '海贼王',
             cover: 'xiezhenxiliexiangce/sp9.jpg',
             photos: [
+                // 🎬 视频（带封面）
                 { type: 'video', src: 'xiezhenxiliexiangce/sp9.mp4', poster: 'xiezhenxiliexiangce/sp9.jpg' },
+                
+                // 🖼️ 图片
+                'xiezhenxiliexiangce/sp10.jpg',
+                'xiezhenxiliexiangce/sp11.jpg',
+                'xiezhenxiliexiangce/sp12.jpg',
+                'xiezhenxiliexiangce/sp13.jpg'
                 // 继续加...
             ]
         }
-        // 想加更多系列？直接照着上面复制一个对象进来就行
     ];
 
     // ========== 元素 ==========
@@ -427,21 +453,34 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // ========== 3. 渲染当前系列的当前页图片 ==========
+    // ========== 3. 渲染当前系列的当前页图片（✅ 已修复：区分视频和图片）==========
     function renderSeriesPhotos() {
         seriesGallery.innerHTML = '';
         const start = (currentPage - 1) * PHOTOS_PER_PAGE;
         const end = start + PHOTOS_PER_PAGE;
         const pagePhotos = currentSeries.photos.slice(start, end);
 
-        pagePhotos.forEach((photoSrc, idx) => {
+        pagePhotos.forEach((photo, idx) => {
             const item = document.createElement('div');
             item.className = 'gallery-item';
-            item.innerHTML = `<img src="${photoSrc}" alt="${currentSeries.title} ${start + idx + 1}">`;
-            // 点击图片 → 灯箱，从该系列全局图片数组的对应位置打开
-            item.querySelector('img').addEventListener('click', () => {
-                openLightbox(start + idx);
-            });
+            
+            // ✅ 关键修复：判断是视频对象还是图片字符串
+            if (typeof photo === 'object' && photo.type === 'video') {
+                // 视频
+                item.innerHTML = `
+                    <video src="${photo.src}" poster="${photo.poster}" muted loop 
+                            preload="metadata"
+                            style="width:100%;height:100%;object-fit:cover;display:block;"></video>
+                    <span class="play-btn"></span>
+                `;
+            } else {
+                // 图片
+                const imgSrc = typeof photo === 'string' ? photo : photo.src;
+                item.innerHTML = `<img src="${imgSrc}" alt="${currentSeries.title} ${start + idx + 1}">`;
+            }
+            
+            // 点击 → 灯箱
+            item.addEventListener('click', () => openLightbox(start + idx));
             seriesGallery.appendChild(item);
         });
 
@@ -500,7 +539,7 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    // ========== 6. 灯箱（只在该系列内切换） ==========
+    // ========== 6. 灯箱（✅ 已修复：兼容视频）==========
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightboxImg');
     const lightboxClose = document.getElementById('lightboxClose');
@@ -509,7 +548,7 @@
     const lbCount = document.getElementById('lbCount');
 
     function openLightbox(index) {
-        lightboxPhotos = currentSeries.photos;  // 只绑定当前系列的图
+        lightboxPhotos = currentSeries.photos;
         lightboxIndex = index;
         updateLightbox();
         lightbox.classList.add('active');
@@ -517,11 +556,40 @@
     }
 
     function updateLightbox() {
-        lightboxImg.src = lightboxPhotos[lightboxIndex];
+        const photo = lightboxPhotos[lightboxIndex];
+        
+        // 清除旧视频
+        const oldVideo = lightbox.querySelector('video');
+        if (oldVideo) {
+            oldVideo.pause();
+            oldVideo.remove();
+        }
+        
+        // ✅ 关键修复：判断是视频还是图片
+        if (typeof photo === 'object' && photo.type === 'video') {
+            // 视频
+            lightboxImg.style.display = 'none';
+            const v = document.createElement('video');
+            v.src = photo.src;
+            v.controls = true;
+            v.autoplay = true;
+            v.style.maxWidth = '90%';
+            v.style.maxHeight = '90vh';
+            v.style.borderRadius = '12px';
+            lightbox.appendChild(v);
+        } else {
+            // 图片
+            const imgSrc = typeof photo === 'string' ? photo : photo.src;
+            lightboxImg.style.display = '';
+            lightboxImg.src = imgSrc;
+        }
+        
         lbCount.textContent = `${lightboxIndex + 1} / ${lightboxPhotos.length}`;
     }
 
     function closeLightbox() {
+        const playingVideo = lightbox.querySelector('video');
+        if (playingVideo) playingVideo.pause();
         lightbox.classList.remove('active');
         document.body.style.overflow = '';
     }
