@@ -46,11 +46,9 @@
         .content { font-size: 16px; line-height: 2; color: #475569; }
         .subtitle { text-align: center; color: #64748b; margin-bottom: 40px; }
 
-        /* 视图切换 */
         .view { display: none; animation: fadeIn 0.3s ease; }
         .view.active { display: block; }
 
-        /* 返回按钮 */
         .back-to-wall {
             display: inline-block;
             margin-bottom: 30px;
@@ -65,7 +63,6 @@
         }
         .back-to-wall:hover { transform: translateY(-2px); }
 
-        /* 封面墙网格 */
         .cover-wall {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -93,37 +90,16 @@
         }
         .cover-card:hover img { transform: scale(1.05); }
 
-        .cover-info {
-            padding: 18px 20px;
-            background: white;
-        }
-        .cover-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: #1e293b;
-            margin-bottom: 4px;
-        }
-        .cover-count {
-            font-size: 13px;
-            color: #94a3b8;
-        }
+        .cover-info { padding: 18px 20px; background: white; }
+        .cover-title { font-size: 18px; font-weight: 700; color: #1e293b; margin-bottom: 4px; }
+        .cover-count { font-size: 13px; color: #94a3b8; }
         .cover-badge {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: rgba(0,0,0,0.65);
-            color: #fff;
-            font-size: 12px;
-            padding: 4px 12px;
-            border-radius: 20px;
+            position: absolute; top: 12px; right: 12px;
+            background: rgba(0,0,0,0.65); color: #fff;
+            font-size: 12px; padding: 4px 12px; border-radius: 20px;
         }
 
-        /* 系列图片网格 */
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 15px;
-        }
+        .gallery { display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; }
 
         .gallery-item {
             position: relative;
@@ -134,199 +110,94 @@
             transition: transform 0.3s, box-shadow 0.3s;
             cursor: zoom-in;
         }
-        .gallery-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-        }
+        .gallery-item:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
         .gallery-item img, .gallery-item video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s;
+            width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s;
         }
         .gallery-item:hover img, .gallery-item:hover video { transform: scale(1.05); }
 
         .play-btn {
-            position: absolute;
-            top: 50%;
-            left: 50%;
+            position: absolute; top: 50%; left: 50%;
             transform: translate(-50%,-50%) scale(0.8);
-            width: 56px;
-            height: 56px;
-            background: rgba(0,0,0,0.55);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.25s, transform 0.25s;
-            pointer-events: none;
+            width: 56px; height: 56px;
+            background: rgba(0,0,0,0.55); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; transition: opacity 0.25s, transform 0.25s; pointer-events: none;
         }
         .play-btn::after {
-            content: '';
-            display: block;
-            width: 0; height: 0;
-            border-style: solid;
-            border-width: 10px 0 10px 18px;
-            border-color: transparent transparent transparent #fff;
-            margin-left: 3px;
+            content: ''; display: block; width: 0; height: 0;
+            border-style: solid; border-width: 10px 0 10px 18px;
+            border-color: transparent transparent transparent #fff; margin-left: 3px;
         }
-        .gallery-item:hover .play-btn {
-            opacity: 1;
-            transform: translate(-50%,-50%) scale(1);
-        }
+        .gallery-item:hover .play-btn { opacity: 1; transform: translate(-50%,-50%) scale(1); }
 
-        /* 灯箱 */
         .lightbox {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
-            z-index: 9999;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            cursor: zoom-out;
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(0,0,0,0.85);
+            z-index: 9999; align-items: center; justify-content: center;
+            padding: 20px; cursor: zoom-out;
         }
         .lightbox.active { display: flex; }
         .lightbox img, .lightbox video {
-            max-width: 90%;
-            max-height: 90vh;
-            border-radius: 12px;
+            max-width: 90%; max-height: 90vh; border-radius: 12px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.5);
         }
 
-        /* 灯箱左右切换 */
         .lb-nav {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0,0,0,0.5);
-            color: white;
-            font-size: 36px;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 10000;
-            transition: background 0.3s;
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: rgba(0,0,0,0.5); color: white; font-size: 36px;
+            width: 60px; height: 60px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; z-index: 10000; transition: background 0.3s;
         }
         .lb-nav:hover { background: rgba(0,0,0,0.8); }
         .lb-prev { left: 20px; }
         .lb-next { right: 20px; }
         .lb-count {
-            position: absolute;
-            top: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: white;
-            background: rgba(0,0,0,0.5);
-            padding: 6px 18px;
-            border-radius: 20px;
-            font-size: 15px;
-            z-index: 10000;
+            position: absolute; top: 30px; left: 50%; transform: translateX(-50%);
+            color: white; background: rgba(0,0,0,0.5);
+            padding: 6px 18px; border-radius: 20px; font-size: 15px; z-index: 10000;
         }
 
         .lightbox-close {
-            position: absolute;
-            top: 30px; right: 30px;
-            color: white;
-            font-size: 40px;
-            font-weight: 300;
-            cursor: pointer;
-            transition: transform 0.3s;
-            line-height: 1;
-            z-index: 10000;
+            position: absolute; top: 30px; right: 30px; color: white;
+            font-size: 40px; font-weight: 300; cursor: pointer;
+            transition: transform 0.3s; line-height: 1; z-index: 10000;
         }
         .lightbox-close:hover { transform: rotate(90deg); }
 
         /* 分页 */
         .pagination {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            margin-top: 50px;
-            flex-wrap: wrap;
+            display: flex; justify-content: center; align-items: center;
+            gap: 10px; margin-top: 50px; flex-wrap: wrap;
         }
         .page-btn {
-            padding: 8px 18px;
-            border: 2px solid #667eea;
-            background: white;
-            color: #667eea;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 500;
-            font-size: 14px;
-            transition: all 0.3s;
+            padding: 8px 18px; border: 2px solid #667eea; background: white;
+            color: #667eea; border-radius: 50px; cursor: pointer;
+            font-weight: 500; font-size: 14px; transition: all 0.3s;
         }
-        .page-btn:hover:not(.disabled):not(.active) {
-            background: #f0f0ff;
-            transform: translateY(-2px);
-        }
-        .page-btn.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-color: transparent;
-        }
-        .page-btn.disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
+        .page-btn:hover:not(.disabled):not(.active) { background: #f0f0ff; transform: translateY(-2px); }
+        .page-btn.active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-color: transparent; }
+        .page-btn.disabled { opacity: 0.4; cursor: not-allowed; }
 
         /* 页码跳转框 */
-        .page-jump {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            margin-left: 10px;
-        }
+        .page-jump { display: flex; align-items: center; gap: 6px; margin-left: 10px; }
         .page-jump input {
-            width: 60px;
-            padding: 6px 10px;
-            border: 2px solid #667eea;
-            border-radius: 20px;
-            text-align: center;
-            font-size: 14px;
-            outline: none;
-            color: #667eea;
-            background: white;
+            width: 60px; padding: 6px 10px; border: 2px solid #667eea;
+            border-radius: 20px; text-align: center; font-size: 14px;
+            outline: none; color: #667eea; background: white;
         }
-        .page-jump input:focus {
-            border-color: #764ba2;
-        }
-        .page-jump input::placeholder {
-            color: #a5b4fc;
-            font-weight: 400;
-            font-size: 12px;
-        }
+        .page-jump input:focus { border-color: #764ba2; }
+        .page-jump input::placeholder { color: #a5b4fc; font-weight: 400; font-size: 12px; }
         .jump-btn {
-            padding: 6px 14px;
-            border: 2px solid #667eea;
-            background: white;
-            color: #667eea;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s;
+            padding: 6px 14px; border: 2px solid #667eea; background: white;
+            color: #667eea; border-radius: 20px; cursor: pointer; font-size: 14px; transition: all 0.3s;
         }
-        .jump-btn:hover {
-            background: #667eea;
-            color: white;
-        }
+        .jump-btn:hover { background: #667eea; color: white; }
 
         footer {
-            max-width: 1200px;
-            margin: 30px auto 0;
-            background: #1e293b;
-            color: #94a3b8;
-            text-align: center;
-            padding: 30px 5%;
-            border-radius: 20px;
+            max-width: 1200px; margin: 30px auto 0; background: #1e293b;
+            color: #94a3b8; text-align: center; padding: 30px 5%; border-radius: 20px;
         }
         footer p { margin-bottom: 8px; font-size: 14px; }
 
@@ -354,24 +225,21 @@
         <h1>私拍相册</h1>
         <div class="content">
 
-            <!-- ========== 视图1：系列封面墙 ========== -->
             <div class="view active" id="viewWall">
                 <p class="subtitle">「阿情killy」 私拍、写真系列</p>
-                <div class="cover-wall" id="coverWall"><!-- JS 动态生成 --></div>
+                <div class="cover-wall" id="coverWall"></div>
             </div>
 
-            <!-- ========== 视图2：某个系列的详情页 ========== -->
             <div class="view" id="viewSeries">
                 <span class="back-to-wall" id="backToWall">← 返回</span>
                 <p class="subtitle" id="seriesSubtitle"></p>
-                <div class="gallery" id="seriesGallery"><!-- JS 动态生成 --></div>
+                <div class="gallery" id="seriesGallery"></div>
                 <div class="pagination" id="seriesPagination"></div>
             </div>
 
         </div>
     </div>
 
-    <!-- 页脚 -->
     <footer>
         <p>© 2026 MyWebsite. All rights reserved.</p>
         <p>阿情专属，感谢访问</p>
@@ -382,7 +250,6 @@
         </p>
     </footer>
 
-    <!-- 灯箱 -->
     <div class="lightbox" id="lightbox">
         <span class="lightbox-close" id="lightboxClose">&times;</span>
         <div class="lb-nav lb-prev" id="lbPrev">‹</div>
@@ -392,11 +259,6 @@
     </div>
 
     <script>
-    // ========================================================
-    //  数据：所有系列
-    //  🖼️ 图片: 直接写 '路径'
-    //  🎬 视频: { type: 'video', src: 'xxx.mp4', poster: 'xxx.jpg' }
-    // ========================================================
     const seriesData = [
         {
             id: 'dbz',
@@ -430,7 +292,6 @@
         }
     ];
 
-    // ========== 元素 ==========
     const viewWall = document.getElementById('viewWall');
     const viewSeries = document.getElementById('viewSeries');
     const coverWall = document.getElementById('coverWall');
@@ -440,15 +301,15 @@
     const backToWall = document.getElementById('backToWall');
 
     const PHOTOS_PER_PAGE = 12;
+    const MAX_PAGE_BTN = 10;   // 最多同时显示 10 个页码
     let currentSeries = null;
     let currentPage = 1;
     let totalPages = 1;
 
-    // 灯箱状态
     let lightboxPhotos = [];
     let lightboxIndex = 0;
 
-    // ========== 1. 渲染封面墙 ==========
+    // ========== 1. 封面墙 ==========
     function renderCoverWall() {
         coverWall.innerHTML = '';
         seriesData.forEach(series => {
@@ -467,7 +328,7 @@
         });
     }
 
-    // ========== 2. 打开某个系列 ==========
+    // ========== 2. 打开系列 ==========
     function openSeries(seriesId) {
         currentSeries = seriesData.find(s => s.id === seriesId);
         if (!currentSeries) return;
@@ -477,15 +338,13 @@
         currentPage = 1;
 
         seriesSubtitle.textContent = `「${currentSeries.title}」 共 ${currentSeries.photos.length} 张`;
-        
         viewWall.classList.remove('active');
         viewSeries.classList.add('active');
-        
         renderSeriesPhotos();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // ========== 3. 渲染当前系列的当前页图片 ==========
+    // ========== 3. 渲染图片 ==========
     function renderSeriesPhotos() {
         seriesGallery.innerHTML = '';
         const perPage = currentSeries.perPage || PHOTOS_PER_PAGE;
@@ -496,7 +355,6 @@
         pagePhotos.forEach((photo, idx) => {
             const item = document.createElement('div');
             item.className = 'gallery-item';
-            
             if (typeof photo === 'object' && photo.type === 'video') {
                 item.innerHTML = `
                     <video src="${photo.src}" poster="${photo.poster}" muted loop 
@@ -508,7 +366,6 @@
                 const imgSrc = typeof photo === 'string' ? photo : photo.src;
                 item.innerHTML = `<img src="${imgSrc}" alt="${currentSeries.title} ${start + idx + 1}">`;
             }
-            
             item.addEventListener('click', () => openLightbox(start + idx));
             seriesGallery.appendChild(item);
         });
@@ -516,7 +373,26 @@
         renderSeriesPagination();
     }
 
-    // ========== 4. 系列内分页（含跳转框）==========
+    // ========== 4. 分页（滑动窗口：最多显示 10 个页码）==========
+    // 计算要显示的页码区间 [startPage, endPage]
+    function getPageRange(current, total) {
+        const max = MAX_PAGE_BTN;
+        if (total <= max) return [1, total];
+
+        let startPage = current - Math.floor(max / 2);
+        let endPage = current + Math.floor(max / 2);
+
+        if (startPage < 1) {
+            startPage = 1;
+            endPage = max;
+        }
+        if (endPage > total) {
+            endPage = total;
+            startPage = total - max + 1;
+        }
+        return [startPage, endPage];
+    }
+
     function renderSeriesPagination() {
         seriesPagination.innerHTML = '';
         if (totalPages <= 1) return;
@@ -535,8 +411,9 @@
         };
         seriesPagination.appendChild(prevBtn);
 
-        // 页码数字
-        for (let i = 1; i <= totalPages; i++) {
+        // 页码数字（滑动窗口）
+        const [startPage, endPage] = getPageRange(currentPage, totalPages);
+        for (let i = startPage; i <= endPage; i++) {
             const btn = document.createElement('button');
             btn.className = 'page-btn';
             btn.textContent = i;
@@ -563,7 +440,7 @@
         };
         seriesPagination.appendChild(nextBtn);
 
-        // ====== 页码跳转输入框 ======
+        // 跳转框
         const jumpBox = document.createElement('div');
         jumpBox.className = 'page-jump';
         jumpBox.innerHTML = `
@@ -574,18 +451,12 @@
 
         const jumpInput = document.getElementById('jumpInput');
         const jumpBtn = document.getElementById('jumpBtn');
-        
         jumpBtn.addEventListener('click', handleJump);
-        jumpInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') handleJump();
-        });
+        jumpInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleJump(); });
 
         function handleJump() {
             const value = parseInt(jumpInput.value);
-            if (isNaN(value)) {
-                jumpInput.value = '';
-                return;
-            }
+            if (isNaN(value)) { jumpInput.value = ''; return; }
             const targetPage = Math.max(1, Math.min(value, totalPages));
             if (targetPage !== currentPage) {
                 currentPage = targetPage;
@@ -603,7 +474,7 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    // ========== 6. 灯箱（兼容视频）==========
+    // ========== 6. 灯箱 ==========
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightboxImg');
     const lightboxClose = document.getElementById('lightboxClose');
@@ -621,29 +492,20 @@
 
     function updateLightbox() {
         const photo = lightboxPhotos[lightboxIndex];
-        
         const oldVideo = lightbox.querySelector('video');
-        if (oldVideo) {
-            oldVideo.pause();
-            oldVideo.remove();
-        }
-        
+        if (oldVideo) oldVideo.pause(), oldVideo.remove();
+
         if (typeof photo === 'object' && photo.type === 'video') {
             lightboxImg.style.display = 'none';
             const v = document.createElement('video');
-            v.src = photo.src;
-            v.controls = true;
-            v.autoplay = true;
-            v.style.maxWidth = '90%';
-            v.style.maxHeight = '90vh';
-            v.style.borderRadius = '12px';
+            v.src = photo.src; v.controls = true; v.autoplay = true;
+            v.style.maxWidth = '90%'; v.style.maxHeight = '90vh'; v.style.borderRadius = '12px';
             lightbox.appendChild(v);
         } else {
             const imgSrc = typeof photo === 'string' ? photo : photo.src;
             lightboxImg.style.display = '';
             lightboxImg.src = imgSrc;
         }
-        
         lbCount.textContent = `${lightboxIndex + 1} / ${lightboxPhotos.length}`;
     }
 
@@ -664,11 +526,8 @@
         lightboxIndex = (lightboxIndex + 1) % lightboxPhotos.length;
         updateLightbox();
     });
-
     lightboxClose.addEventListener('click', closeLightbox);
-    lightbox.addEventListener('click', (e) => {
-        if (e.target === lightbox) closeLightbox();
-    });
+    lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
     document.addEventListener('keydown', (e) => {
         if (!lightbox.classList.contains('active')) return;
         if (e.key === 'Escape') closeLightbox();
@@ -682,7 +541,6 @@
         }
     });
 
-    // ========== 初始化 ==========
     renderCoverWall();
     </script>
 
