@@ -180,6 +180,20 @@
         .page-btn.active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-color: transparent; }
         .page-btn.disabled { opacity: 0.4; cursor: not-allowed; }
 
+        /* ====== 新增：共多少页的醒目提示 ====== */
+        .page-info {
+            font-size: 15px;
+            color: #475569;
+            font-weight: 500;
+            margin: 0 8px;
+            white-space: nowrap;
+        }
+        .page-info b {
+            color: #667eea;
+            font-size: 17px;
+            font-weight: 700;
+        }
+
         /* 页码跳转框 */
         .page-jump { display: flex; align-items: center; gap: 6px; margin-left: 10px; }
         .page-jump input {
@@ -301,7 +315,7 @@
     const backToWall = document.getElementById('backToWall');
 
     const PHOTOS_PER_PAGE = 12;
-    const MAX_PAGE_BTN = 10;   // 最多同时显示 10 个页码
+    const MAX_PAGE_BTN = 10;
     let currentSeries = null;
     let currentPage = 1;
     let totalPages = 1;
@@ -373,8 +387,7 @@
         renderSeriesPagination();
     }
 
-    // ========== 4. 分页（滑动窗口：最多显示 10 个页码）==========
-    // 计算要显示的页码区间 [startPage, endPage]
+    // ========== 4. 分页（滑动窗口 + 共X页提示 + 末页）==========
     function getPageRange(current, total) {
         const max = MAX_PAGE_BTN;
         if (total <= max) return [1, total];
@@ -396,6 +409,12 @@
     function renderSeriesPagination() {
         seriesPagination.innerHTML = '';
         if (totalPages <= 1) return;
+
+        // ====== 共多少页（放在最前面，醒目显示）======
+        const info = document.createElement('span');
+        info.className = 'page-info';
+        info.innerHTML = `共 <b>${totalPages}</b> 页`;
+        seriesPagination.appendChild(info);
 
         // 上一页
         const prevBtn = document.createElement('button');
@@ -440,11 +459,25 @@
         };
         seriesPagination.appendChild(nextBtn);
 
+        // ====== 末页按钮（紧跟在下一页后面）======
+        const lastBtn = document.createElement('button');
+        lastBtn.className = 'page-btn';
+        lastBtn.textContent = '末页';
+        if (currentPage === totalPages) lastBtn.classList.add('disabled');
+        lastBtn.onclick = () => {
+            if (currentPage < totalPages) {
+                currentPage = totalPages;
+                renderSeriesPhotos();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        };
+        seriesPagination.appendChild(lastBtn);
+
         // 跳转框
         const jumpBox = document.createElement('div');
         jumpBox.className = 'page-jump';
         jumpBox.innerHTML = `
-            <input type="number" id="jumpInput" min="1" max="${totalPages}" placeholder="共${totalPages}页">
+            <input type="number" id="jumpInput" min="1" max="${totalPages}" placeholder="跳转">
             <button class="jump-btn" id="jumpBtn">跳转</button>
         `;
         seriesPagination.appendChild(jumpBox);
