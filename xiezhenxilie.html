@@ -405,12 +405,6 @@
         seriesPagination.innerHTML = '';
         if (totalPages <= 1) return;
 
-        // 共多少页
-        const info = document.createElement('span');
-        info.className = 'page-info';
-        info.innerHTML = `共 <b>${totalPages}</b> 页`;
-        seriesPagination.appendChild(info);
-
         // 上一页
         const prevBtn = document.createElement('button');
         prevBtn.className = 'page-btn';
@@ -475,6 +469,12 @@
             <input type="number" id="jumpInput" min="1" max="${totalPages}" placeholder="输入页数">
         `;
         seriesPagination.appendChild(jumpBox);
+
+        // ====== 共多少页（放在跳转框后面）======
+        const info = document.createElement('span');
+        info.className = 'page-info';
+        info.innerHTML = `共 <b>${totalPages}</b> 页`;
+        seriesPagination.appendChild(info);
 
         const jumpInput = document.getElementById('jumpInput');
 
