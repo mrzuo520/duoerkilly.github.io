@@ -194,7 +194,7 @@
             font-weight: 700;
         }
 
-        /* 页码跳转输入框（已取消跳转按钮） */
+        /* 页码跳转输入框 */
         .page-jump { display: flex; align-items: center; gap: 6px; margin-left: 10px; }
         .page-jump input {
             width: 90px; padding: 6px 12px; border: 2px solid #667eea;
@@ -203,7 +203,7 @@
         }
         .page-jump input:focus { border-color: #764ba2; }
         .page-jump input::placeholder {
-            color: #a5b4fc;   /* 灰色提示文字 */
+            color: #a5b4fc;
             font-weight: 400;
             font-size: 13px;
         }
@@ -287,7 +287,8 @@
             cover: 'xiezhenxiliexiangce/x29.jpg',
             perPage: 30,
             photos: [
-                ...Array.from({ length: 974 }, (_, i) => `xiezhenxiliexiangce/x${i + 1}.jpg`)
+                // ✅ 关键修复：两行之间加上逗号
+                ...Array.from({ length: 974 }, (_, i) => `xiezhenxiliexiangce/x${i + 1}.jpg`),
                 ...Array.from({ length: 50 }, (_, i) => `xiezhen2/x${i + 975}.jpg`)
             ]
         },
@@ -463,7 +464,7 @@
         };
         seriesPagination.appendChild(lastBtn);
 
-        // ====== 跳转输入框（无按钮，回车或失焦自动跳转）======
+        // 跳转输入框
         const jumpBox = document.createElement('div');
         jumpBox.className = 'page-jump';
         jumpBox.innerHTML = `
@@ -471,7 +472,7 @@
         `;
         seriesPagination.appendChild(jumpBox);
 
-        // ====== 共多少页（放在跳转框后面）======
+        // 共多少页
         const info = document.createElement('span');
         info.className = 'page-info';
         info.innerHTML = `共 <b>${totalPages}</b> 页`;
@@ -479,14 +480,12 @@
 
         const jumpInput = document.getElementById('jumpInput');
 
-        // 回车跳转
         jumpInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
                 e.preventDefault();
                 doJump();
             }
         });
-        // 输入完成失焦后也跳转
         jumpInput.addEventListener('blur', doJump);
 
         function doJump() {
