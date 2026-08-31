@@ -144,7 +144,21 @@
             transform: none !important;
         }
 
-        /* 页码跳转框 */
+        /* 共多少页提示 */
+        .page-info {
+            font-size: 15px;
+            color: #475569;
+            font-weight: 500;
+            margin: 0 8px;
+            white-space: nowrap;
+        }
+        .page-info b {
+            color: #667eea;
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        /* 页码跳转输入框（无跳转按钮，回车或失焦自动跳转） */
         .page-jump {
             display: flex;
             align-items: center;
@@ -153,14 +167,14 @@
         }
 
         .page-jump input {
-            width: 55px;
-            padding: 7px 10px;
+            width: 90px;
+            padding: 7px 12px;
             border: 2px solid #667eea;
             border-radius: 50px;
             text-align: center;
             font-size: 14px;
             font-weight: 500;
-            color: #667eea;
+            color: #333;
             outline: none;
             transition: border-color 0.3s;
             background: white;
@@ -173,24 +187,7 @@
         .page-jump input::placeholder {
             color: #a5b4fc;
             font-weight: 400;
-            font-size: 12px;
-        }
-
-        .jump-btn {
-            padding: 7px 14px;
-            border: 2px solid #667eea;
-            background: white;
-            color: #667eea;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 500;
-            font-size: 14px;
-            transition: all 0.3s;
-        }
-
-        .jump-btn:hover {
-            background: #f0f0ff;
-            transform: translateY(-2px);
+            font-size: 13px;
         }
 
         /* 灯箱 - 查看原图 */
@@ -291,6 +288,9 @@
                 padding: 6px 14px;
                 font-size: 13px;
             }
+            .page-info {
+                margin: 6px 0;
+            }
             .page-jump {
                 margin-left: 0;
                 margin-top: 8px;
@@ -339,7 +339,7 @@
         const IMAGE_CONFIG = {
             folder: 'siwameituixiangce',   // 图片所在文件夹
             prefix: 's',                   // 文件名前缀
-            totalImages: 90,               // 图片总数（从 1 到 totalImages）
+            totalImages: 90,               // 图片总数（改这里，页面自动扩展）
             perPage: 30                    // 每页显示图片数
         };
 
@@ -364,9 +364,8 @@
 
             const subtitle = document.createElement('p');
             subtitle.className = 'subtitle';
-            subtitle.textContent = page === 1 
-                ? '「阿情killy丝袜系列」 第 1 页' 
-                : `第 ${page} 页`;
+            // ✅ 显示图片总数
+            subtitle.textContent = `「阿情killy丝袜系列」 共 ${allImages.length} 张`;
             pageDiv.appendChild(subtitle);
 
             const gallery = document.createElement('div');
@@ -379,7 +378,7 @@
                 const item = document.createElement('div');
                 item.className = 'gallery-item';
                 const img = document.createElement('img');
-                img.src = allImages[i];  // 直接设置 src，无需懒加载
+                img.src = allImages[i];
                 img.alt = `丝袜美腿${i + 1}`;
                 item.appendChild(img);
                 gallery.appendChild(item);
@@ -418,24 +417,45 @@
         });
 
         // ============================
-        //  分页功能
+        //  分页功能（含：末页 + 输入页数 + 共多少页）
         // ============================
         const pagination = document.getElementById('pagination');
         let currentPage = 1;
+        const MAX_PAGE_BTN = 10;  // 页码窗口最多显示数量
+
+        // 滑动窗口：计算当前应显示哪一段页码
+        function getPageRange(current, total) {
+            const max = MAX_PAGE_BTN;
+            if (total <= max) return [1, total];
+
+            let startPage = current - Math.floor(max / 2);
+            let endPage = current + Math.floor(max / 2);
+
+            if (startPage < 1) {
+                startPage = 1;
+                endPage = max;
+            }
+            if (endPage > total) {
+                endPage = total;
+                startPage = total - max + 1;
+            }
+            return [startPage, endPage];
+        }
 
         function renderPagination() {
             pagination.innerHTML = '';
 
-            // 上一页
+            // ====== 上一页 ======
             const prevBtn = document.createElement('button');
-            prevBtn.className = 'page-btn prev-btn';
+            prevBtn.className = 'page-btn';
             prevBtn.textContent = '上一页';
             if (currentPage === 1) prevBtn.classList.add('disabled');
             prevBtn.addEventListener('click', () => goToPage(currentPage - 1));
             pagination.appendChild(prevBtn);
 
-            // 页码
-            for (let i = 1; i <= totalPages; i++) {
+            // ====== 页码（滑动窗口）======
+            const [startPage, endPage] = getPageRange(currentPage, totalPages);
+            for (let i = startPage; i <= endPage; i++) {
                 const pageBtn = document.createElement('button');
                 pageBtn.className = 'page-btn';
                 pageBtn.textContent = i;
@@ -444,29 +464,46 @@
                 pagination.appendChild(pageBtn);
             }
 
-            // 下一页
+            // ====== 下一页 ======
             const nextBtn = document.createElement('button');
-            nextBtn.className = 'page-btn next-btn';
+            nextBtn.className = 'page-btn';
             nextBtn.textContent = '下一页';
             if (currentPage === totalPages) nextBtn.classList.add('disabled');
             nextBtn.addEventListener('click', () => goToPage(currentPage + 1));
             pagination.appendChild(nextBtn);
 
-            // 跳转框
+            // ====== 末页 ======
+            const lastBtn = document.createElement('button');
+            lastBtn.className = 'page-btn';
+            lastBtn.textContent = '末页';
+            if (currentPage === totalPages) lastBtn.classList.add('disabled');
+            lastBtn.addEventListener('click', () => goToPage(totalPages));
+            pagination.appendChild(lastBtn);
+
+            // ====== 输入页数框（无按钮，回车或失焦自动跳转）======
             const jumpBox = document.createElement('div');
             jumpBox.className = 'page-jump';
             jumpBox.innerHTML = `
-                <input type="number" id="jumpInput" min="1" max="${totalPages}" placeholder="共${totalPages}页">
-                <button class="jump-btn" id="jumpBtn">跳转</button>
+                <input type="number" id="jumpInput" min="1" max="${totalPages}" placeholder="输入页数">
             `;
             pagination.appendChild(jumpBox);
 
+            // ====== 共多少页（放在跳转框后面）======
+            const info = document.createElement('span');
+            info.className = 'page-info';
+            info.innerHTML = `共 <b>${totalPages}</b> 页`;
+            pagination.appendChild(info);
+
             const jumpInput = document.getElementById('jumpInput');
-            const jumpBtn = document.getElementById('jumpBtn');
-            jumpBtn.addEventListener('click', handleJump);
+            // 回车跳转
             jumpInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') handleJump();
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleJump();
+                }
             });
+            // 失焦跳转
+            jumpInput.addEventListener('blur', handleJump);
         }
 
         function handleJump() {
@@ -490,7 +527,7 @@
             document.querySelector(`.page[data-page="${pageNum}"]`).classList.add('active');
 
             currentPage = pageNum;
-            renderPagination();  // 更新按钮高亮
+            renderPagination();  // 更新按钮高亮 & 页码窗口
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
